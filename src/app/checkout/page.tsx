@@ -33,6 +33,8 @@ export default function CheckoutPage() {
   const [copied, setCopied] = useState(false);
   const [confirmResearch, setConfirmResearch] = useState(false);
   const [confirmTerms, setConfirmTerms] = useState(false);
+  const [confirmWaiver, setConfirmWaiver] = useState(false);
+  const [showWaiver, setShowWaiver] = useState(false);
 
   const isCrypto = paymentMethod === "crypto";
   const discountedTotal = isCrypto ? total * 0.9 : total;
@@ -530,6 +532,81 @@ export default function CheckoutPage() {
                       <Link href="/legal/research-use" className="underline" style={{ color: "#2dd4bf" }}>Research Use Policy</Link>.
                     </label>
                   </div>
+
+                  {/* Liability Waiver checkbox */}
+                  <div className="rounded-xl overflow-hidden" style={{ border: "1px solid #f8514940" }}>
+                    {/* Header */}
+                    <div className="flex items-center justify-between px-4 py-3"
+                      style={{ backgroundColor: "#f8514912" }}>
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="w-4 h-4 shrink-0" style={{ color: "#f85149" }} />
+                        <span className="text-xs font-bold text-white">Research Use Only — Liability Waiver</span>
+                        <span className="text-[10px] px-1.5 py-0.5 rounded font-bold" style={{ backgroundColor: "#f8514920", color: "#f85149" }}>REQUIRED</span>
+                      </div>
+                      <button
+                        onClick={() => setShowWaiver(v => !v)}
+                        className="text-[10px] font-semibold transition-colors hover:text-white"
+                        style={{ color: "#8b949e" }}>
+                        {showWaiver ? "Hide ▲" : "Read full waiver ▼"}
+                      </button>
+                    </div>
+
+                    {/* Expandable full waiver text */}
+                    {showWaiver && (
+                      <div className="px-4 py-4 text-[11px] leading-relaxed space-y-3"
+                        style={{ backgroundColor: "#0d1117", color: "#8b949e", borderTop: "1px solid #f8514920" }}>
+                        <p><strong className="text-white">By checking this box and completing this purchase, I confirm and agree to the following:</strong></p>
+                        <div>
+                          <p className="font-bold text-white mb-0.5">Research use only.</p>
+                          <p>I understand that all products supplied by Gills Bio Lab are sold strictly for laboratory research purposes only. They are not intended for human or veterinary use, ingestion, injection, diagnostic use, treatment, cure, or prevention of any disease.</p>
+                        </div>
+                        <div>
+                          <p className="font-bold text-white mb-0.5">No medical or consumer use.</p>
+                          <p>I will not use, or allow others to use, any product from Gills Bio Lab as a drug, food, cosmetic, dietary supplement, or any other form of medical or consumer product, and I will not repackage or resell these products for such uses.</p>
+                        </div>
+                        <div>
+                          <p className="font-bold text-white mb-0.5">Qualified purchaser.</p>
+                          <p>I represent that I am a qualified researcher, or I am purchasing on behalf of a qualified laboratory, institution, or business that is equipped and authorized to handle research chemicals and assumes full responsibility for their storage, handling, and use in accordance with all applicable laws, regulations, and safety standards.</p>
+                        </div>
+                        <div>
+                          <p className="font-bold text-white mb-0.5">Assumption of risk.</p>
+                          <p>I understand that research chemicals and peptides may pose unknown hazards and risks. I voluntarily assume all risks associated with the possession, handling, storage, and use of these products in my research activities.</p>
+                        </div>
+                        <div>
+                          <p className="font-bold text-white mb-0.5">Release of liability.</p>
+                          <p>To the fullest extent permitted by law, I release and discharge Gills Bio Lab, its owners, employees, and affiliates from any and all claims, damages, losses, or liabilities arising from or related to the use, misuse, handling, storage, or disposal of any products purchased, whether by me or by any third party to whom I provide access.</p>
+                        </div>
+                        <div>
+                          <p className="font-bold text-white mb-0.5">Indemnification.</p>
+                          <p>I agree to indemnify and hold harmless Gills Bio Lab, its owners, employees, and affiliates from any claims, demands, actions, damages, costs, or expenses (including reasonable attorneys&apos; fees) arising out of or related to my purchase, possession, use, misuse, or distribution of these products, or my violation of this agreement or any applicable law.</p>
+                        </div>
+                        <div>
+                          <p className="font-bold text-white mb-0.5">No guarantees or warranties.</p>
+                          <p>I understand that all products are provided &quot;as is&quot; for research use only, without any express or implied warranties, including, without limitation, any warranty of safety, merchantability, fitness for a particular purpose, or non‑infringement.</p>
+                        </div>
+                        <div>
+                          <p className="font-bold text-white mb-0.5">Compliance with laws.</p>
+                          <p>I am solely responsible for ensuring that my purchase, import, possession, and use of these products complies with all applicable local, state, and federal laws and regulations in my jurisdiction.</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Checkbox row */}
+                    <div className="flex items-start gap-3 px-4 py-3"
+                      style={{ backgroundColor: "#f8514908", borderTop: "1px solid #f8514920" }}>
+                      <input
+                        type="checkbox"
+                        id="confirm-waiver"
+                        checked={confirmWaiver}
+                        onChange={e => setConfirmWaiver(e.target.checked)}
+                        className="mt-0.5 w-4 h-4 rounded cursor-pointer shrink-0"
+                        style={{ accentColor: "#f85149" }}
+                      />
+                      <label htmlFor="confirm-waiver" className="text-xs leading-relaxed cursor-pointer" style={{ color: "#c9d1d9" }}>
+                        I have read, understood, and agree to the Gills Bio Lab <strong className="text-white">&quot;Research Use Only&quot; Acknowledgment & Liability Waiver</strong>. I confirm that I am purchasing strictly for laboratory research use and that Gills Bio Lab is not responsible for any misuse of these products.
+                      </label>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-2 text-xs" style={{ color: "#8b949e" }}>
@@ -545,7 +622,7 @@ export default function CheckoutPage() {
                   </button>
                   <button
                     onClick={placeOrder}
-                    disabled={!confirmResearch || !confirmTerms}
+                    disabled={!confirmResearch || !confirmTerms || !confirmWaiver}
                     className="flex-1 py-3.5 rounded-xl text-sm font-semibold transition-all hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
                     style={{ background: "linear-gradient(135deg, #2dd4bf, #0891b2)", color: "#0d1117", boxShadow: "0 0 15px rgba(45,212,191,0.2)" }}
                   >
