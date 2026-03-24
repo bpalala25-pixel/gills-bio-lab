@@ -6,6 +6,7 @@ import ErrorReporter from "@/components/ErrorReporter";
 import Script from "next/script";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import ChatWidget from "@/components/chat-widget";
 import { CartProvider } from "@/lib/cart-context";
 
 const geistSans = Geist({
@@ -50,6 +51,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <ChatWidget />
         </CartProvider>
         <VisualEditsMessenger />
       </body>
