@@ -31,7 +31,7 @@ export default function ProductPage() {
   const selectedPrice = product.prices[selectedPriceIdx];
 
   function handleAddToCart() {
-    addItem(product, selectedPrice.qty, selectedPrice.price, qty);
+    addItem(product!, selectedPrice.qty, selectedPrice.price, qty);
     setAdded(true);
     setTimeout(() => {
       setAdded(false);

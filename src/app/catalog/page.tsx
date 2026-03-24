@@ -65,7 +65,8 @@ export default function CatalogPage() {
           </p>
           <div className="flex flex-wrap gap-3 mt-6">
             <a
-              href="/price-list.pdf"
+              href="/catalog-pdf"
+              target="_blank"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:scale-105"
               style={{ background: "linear-gradient(135deg, #2dd4bf, #0891b2)", color: "#0d1117" }}
             >
