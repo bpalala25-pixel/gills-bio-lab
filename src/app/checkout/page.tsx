@@ -26,7 +26,7 @@ export default function CheckoutPage() {
   const [step, setStep] = useState<Step>("info");
   const [placed, setPlaced] = useState(false);
 
-  const [info, setInfo] = useState({ name: "", institution: "", email: "", phone: "" });
+  const [info, setInfo] = useState({ name: "", institution: "", role: "", email: "", phone: "" });
   const [shipping, setShipping] = useState({ address: "", city: "", state: "", zip: "", country: "US", method: "standard" });
   const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto" | "cashapp">("card");
   const [selectedCoin, setSelectedCoin] = useState<typeof CRYPTO_COINS[number]["id"]>("usdc");
@@ -128,7 +128,7 @@ export default function CheckoutPage() {
             {step === "info" && (
               <div className="space-y-4">
                 <h2 className="text-lg font-bold text-white mb-2">Customer Information</h2>
-                <p className="text-xs mb-4" style={{ color: "#8b949e" }}>Institution or lab name is required for all orders.</p>
+                <p className="text-xs mb-4" style={{ color: "#8b949e" }}>Institution or lab name is required for all orders. Products are sold to qualified researchers and institutions only.</p>
                 {[
                   { label: "Full Name *", key: "name", type: "text", placeholder: "Dr. Jane Smith" },
                   { label: "Institution / Lab Name *", key: "institution", type: "text", placeholder: "University Research Laboratory" },
@@ -149,9 +149,31 @@ export default function CheckoutPage() {
                     />
                   </div>
                 ))}
+                {/* Researcher type */}
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>
+                    Researcher / Buyer Type *
+                  </label>
+                  <select
+                    value={info.role}
+                    onChange={e => setInfo(i => ({ ...i, role: e.target.value }))}
+                    className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                    style={{ backgroundColor: "#161b22", border: "1px solid rgba(255,255,255,0.1)", color: info.role ? "#e8edf2" : "#8b949e" }}
+                  >
+                    <option value="" disabled>Select your role...</option>
+                    <option value="academic">Academic / University Researcher</option>
+                    <option value="biotech">Biotech / Pharma Company</option>
+                    <option value="cro">Contract Research Organization (CRO)</option>
+                    <option value="hospital">Hospital / Medical Research Division</option>
+                    <option value="government">Government / Regulatory Research</option>
+                    <option value="independent">Independent Research Laboratory</option>
+                    <option value="other">Other Qualified Research Entity</option>
+                  </select>
+                </div>
+
                 <button
                   onClick={() => setStep("shipping")}
-                  disabled={!info.name || !info.institution || !info.email}
+                  disabled={!info.name || !info.institution || !info.email || !info.role}
                   className="w-full py-3.5 rounded-xl text-sm font-semibold transition-all hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed mt-2"
                   style={{ background: "linear-gradient(135deg, #2dd4bf, #0891b2)", color: "#0d1117" }}
                 >

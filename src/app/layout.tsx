@@ -47,7 +47,14 @@ export default function RootLayout({
         />
         <CartProvider>
           <Navbar />
-          <main className="min-h-screen" style={{ paddingTop: "64px" }}>
+          {/* Site-wide RUO compliance bar */}
+          <div className="fixed top-16 left-0 right-0 z-40 text-center text-[11px] font-medium py-1.5 px-4"
+            style={{ backgroundColor: "#0a0e14", borderBottom: "1px solid rgba(248,81,73,0.2)", color: "#8b949e" }}>
+            <span style={{ color: "#f85149" }} className="font-semibold">Research Use Only</span>
+            {" "}— All products are for qualified laboratory use only. Not for human or veterinary use.{" "}
+            Not a drug, food, cosmetic, or dietary supplement.
+          </div>
+          <main className="min-h-screen" style={{ paddingTop: "88px" }}>
             {children}
           </main>
           <Footer />
