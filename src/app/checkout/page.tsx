@@ -19,7 +19,7 @@ export default function CheckoutPage() {
 
   const [info, setInfo] = useState({ name: "", institution: "", email: "", phone: "" });
   const [shipping, setShipping] = useState({ address: "", city: "", state: "", zip: "", country: "US", method: "standard" });
-  const [payment] = useState({ method: "card" });
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto" | "cashapp">("card");
   const [confirmResearch, setConfirmResearch] = useState(false);
   const [confirmTerms, setConfirmTerms] = useState(false);
 
@@ -210,35 +210,181 @@ export default function CheckoutPage() {
             {step === "payment" && (
               <div className="space-y-4">
                 <h2 className="text-lg font-bold text-white mb-2">Payment</h2>
-                <div className="p-5 rounded-xl border border-white/8" style={{ backgroundColor: "#161b22" }}>
-                  <div className="flex items-center gap-3 mb-4">
-                    <Lock className="w-4 h-4" style={{ color: "#2dd4bf" }} />
-                    <span className="text-sm font-medium text-white">Secure Payment</span>
-                    <ShieldCheck className="w-4 h-4 ml-auto" style={{ color: "#2dd4bf" }} />
-                  </div>
-                  <p className="text-xs mb-4" style={{ color: "#8b949e" }}>
-                    All transactions are processed over encrypted HTTPS connections. Payment details are never stored on our servers.
-                  </p>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>Card Number</label>
-                      <input type="text" placeholder="•••• •••• •••• ••••" className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                        style={{ backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", color: "#e8edf2" }} />
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>Expiry</label>
-                        <input type="text" placeholder="MM / YY" className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                          style={{ backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", color: "#e8edf2" }} />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>CVV</label>
-                        <input type="text" placeholder="•••" className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                          style={{ backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", color: "#e8edf2" }} />
-                      </div>
-                    </div>
-                  </div>
+
+                {/* Payment method selector */}
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { id: "card" as const, label: "Credit Card", icon: "💳", desc: "Visa, MC, Amex" },
+                    { id: "cashapp" as const, label: "Cash App", icon: "💚", desc: "$Cashtag" },
+                    { id: "crypto" as const, label: "Crypto", icon: "₿", desc: "BTC, ETH, USDC" },
+                  ].map((m) => (
+                    <button
+                      key={m.id}
+                      onClick={() => setPaymentMethod(m.id)}
+                      className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl text-center transition-all"
+                      style={{
+                        backgroundColor: paymentMethod === m.id ? "#2dd4bf15" : "#161b22",
+                        border: `2px solid ${paymentMethod === m.id ? "#2dd4bf" : "rgba(255,255,255,0.08)"}`,
+                      }}
+                    >
+                      <span className="text-2xl">{m.icon}</span>
+                      <span className="text-xs font-bold text-white">{m.label}</span>
+                      <span className="text-[10px]" style={{ color: "#8b949e" }}>{m.desc}</span>
+                    </button>
+                  ))}
                 </div>
+
+                {/* Card form */}
+                {paymentMethod === "card" && (
+                  <div className="p-5 rounded-xl border border-white/8" style={{ backgroundColor: "#161b22" }}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <Lock className="w-4 h-4" style={{ color: "#2dd4bf" }} />
+                      <span className="text-sm font-medium text-white">Secure Card Payment</span>
+                      <ShieldCheck className="w-4 h-4 ml-auto" style={{ color: "#2dd4bf" }} />
+                    </div>
+                    <p className="text-xs mb-4" style={{ color: "#8b949e" }}>
+                      All transactions are encrypted. Card details are never stored on our servers.
+                    </p>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>Card Number</label>
+                        <input type="text" placeholder="•••• •••• •••• ••••" className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                          style={{ backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", color: "#e8edf2" }} />
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>Expiry</label>
+                          <input type="text" placeholder="MM / YY" className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                            style={{ backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", color: "#e8edf2" }} />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>CVV</label>
+                          <input type="text" placeholder="•••" className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                            style={{ backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", color: "#e8edf2" }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Cash App form */}
+                {paymentMethod === "cashapp" && (
+                  <div className="p-5 rounded-xl border border-white/8" style={{ backgroundColor: "#161b22" }}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="text-xl">💚</span>
+                      <span className="text-sm font-medium text-white">Cash App Payment</span>
+                    </div>
+                    <div className="flex items-center justify-center gap-6 py-4 mb-4 rounded-xl"
+                      style={{ backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.06)" }}>
+                      <div className="text-center">
+                        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-2"
+                          style={{ background: "linear-gradient(135deg, #00d632, #00b01a)" }}>
+                          <span className="text-3xl font-black text-white">$</span>
+                        </div>
+                        <p className="text-sm font-bold text-white">$GillsBioLab</p>
+                        <p className="text-[10px] mt-1" style={{ color: "#8b949e" }}>Cash App Cashtag</p>
+                      </div>
+                    </div>
+                    <ol className="space-y-2 text-xs" style={{ color: "#8b949e" }}>
+                      <li className="flex items-start gap-2">
+                        <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5"
+                          style={{ backgroundColor: "#2dd4bf20", color: "#2dd4bf" }}>1</span>
+                        Open Cash App and tap the <strong className="text-white mx-1">$</strong> icon.
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5"
+                          style={{ backgroundColor: "#2dd4bf20", color: "#2dd4bf" }}>2</span>
+                        Send <strong className="text-white mx-1">${total.toFixed(2)}</strong> to <strong className="text-white mx-1">$GillsBioLab</strong>.
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5"
+                          style={{ backgroundColor: "#2dd4bf20", color: "#2dd4bf" }}>3</span>
+                        Include your email address in the note so we can match your order.
+                      </li>
+                    </ol>
+                    <div className="mt-4">
+                      <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>
+                        Cash App Transaction ID <span style={{ color: "#f85149" }}>*</span>
+                      </label>
+                      <input type="text" placeholder="e.g. #ABC123XYZ" className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                        style={{ backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", color: "#e8edf2" }} />
+                      <p className="text-[10px] mt-1.5" style={{ color: "#8b949e" }}>
+                        Paste your transaction ID after sending payment. Your order will be confirmed once payment is verified.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Crypto form */}
+                {paymentMethod === "crypto" && (
+                  <div className="p-5 rounded-xl border border-white/8" style={{ backgroundColor: "#161b22" }}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="text-xl">₿</span>
+                      <span className="text-sm font-medium text-white">Cryptocurrency Payment</span>
+                    </div>
+
+                    {/* Coin selector */}
+                    <div className="flex gap-2 mb-4">
+                      {[
+                        { id: "btc", label: "Bitcoin", symbol: "BTC", color: "#f7931a" },
+                        { id: "eth", label: "Ethereum", symbol: "ETH", color: "#627eea" },
+                        { id: "usdc", label: "USD Coin", symbol: "USDC", color: "#2775ca" },
+                        { id: "ltc", label: "Litecoin", symbol: "LTC", color: "#a5a5a5" },
+                      ].map((coin) => (
+                        <button key={coin.id}
+                          className="flex-1 py-2 rounded-lg text-xs font-bold transition-all"
+                          style={{ backgroundColor: "#0d1117", border: `1px solid ${coin.color}40`, color: coin.color }}>
+                          {coin.symbol}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Wallet address */}
+                    <div className="p-4 rounded-xl mb-4" style={{ backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.06)" }}>
+                      <p className="text-[10px] font-semibold uppercase tracking-wider mb-2" style={{ color: "#8b949e" }}>Send to Wallet Address</p>
+                      <div className="flex items-center gap-2">
+                        <code className="text-xs text-white break-all flex-1" style={{ color: "#2dd4bf" }}>
+                          bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
+                        </code>
+                        <button
+                          onClick={() => navigator.clipboard.writeText("bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh")}
+                          className="px-2 py-1 rounded text-[10px] font-semibold shrink-0 transition-all hover:opacity-80"
+                          style={{ backgroundColor: "#2dd4bf20", color: "#2dd4bf", border: "1px solid #2dd4bf30" }}>
+                          Copy
+                        </button>
+                      </div>
+                      <div className="mt-2 pt-2 border-t border-white/5 flex items-center justify-between">
+                        <span className="text-[10px]" style={{ color: "#8b949e" }}>Amount due</span>
+                        <span className="text-sm font-bold text-white">${total.toFixed(2)} USD</span>
+                      </div>
+                    </div>
+
+                    <ol className="space-y-2 text-xs mb-4" style={{ color: "#8b949e" }}>
+                      <li className="flex items-start gap-2">
+                        <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5"
+                          style={{ backgroundColor: "#f7931a20", color: "#f7931a" }}>1</span>
+                        Send the exact USD equivalent in your chosen crypto to the address above.
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5"
+                          style={{ backgroundColor: "#f7931a20", color: "#f7931a" }}>2</span>
+                        After sending, paste your transaction hash below so we can verify on-chain.
+                      </li>
+                    </ol>
+
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>
+                        Transaction Hash (TxID) <span style={{ color: "#f85149" }}>*</span>
+                      </label>
+                      <input type="text" placeholder="0x..." className="w-full px-4 py-3 rounded-xl text-sm outline-none font-mono"
+                        style={{ backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", color: "#e8edf2" }} />
+                      <p className="text-[10px] mt-1.5" style={{ color: "#8b949e" }}>
+                        Your order is processed once the transaction receives 1+ confirmation on-chain.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex gap-3">
                   <button onClick={() => setStep("shipping")}
                     className="flex-1 py-3.5 rounded-xl text-sm font-medium transition-all hover:bg-white/5"
@@ -259,10 +405,11 @@ export default function CheckoutPage() {
                 <h2 className="text-lg font-bold text-white mb-2">Review & Confirm Order</h2>
 
                 {/* Summary boxes */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {[
                     { label: "Customer", lines: [info.name, info.institution, info.email] },
                     { label: "Ship to", lines: [shipping.address, `${shipping.city}, ${shipping.state} ${shipping.zip}`] },
+                    { label: "Payment", lines: [paymentMethod === "card" ? "💳 Credit Card" : paymentMethod === "cashapp" ? "💚 Cash App ($GillsBioLab)" : "₿ Cryptocurrency"] },
                   ].map((box) => (
                     <div key={box.label} className="p-4 rounded-xl border border-white/8" style={{ backgroundColor: "#161b22" }}>
                       <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8b949e" }}>{box.label}</p>
