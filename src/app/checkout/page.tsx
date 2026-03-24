@@ -1,0 +1,387 @@
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import { CheckCircle, ShieldCheck, Lock, FlaskConical, AlertTriangle } from "lucide-react";
+import { useCart } from "@/lib/cart-context";
+
+type Step = "info" | "shipping" | "payment" | "review";
+const STEPS: { id: Step; label: string }[] = [
+  { id: "info", label: "Customer Info" },
+  { id: "shipping", label: "Shipping" },
+  { id: "payment", label: "Payment" },
+  { id: "review", label: "Review & Confirm" },
+];
+
+export default function CheckoutPage() {
+  const { items, total, clearCart } = useCart();
+  const [step, setStep] = useState<Step>("info");
+  const [placed, setPlaced] = useState(false);
+
+  const [info, setInfo] = useState({ name: "", institution: "", email: "", phone: "" });
+  const [shipping, setShipping] = useState({ address: "", city: "", state: "", zip: "", country: "US", method: "standard" });
+  const [payment] = useState({ method: "card" });
+  const [confirmResearch, setConfirmResearch] = useState(false);
+  const [confirmTerms, setConfirmTerms] = useState(false);
+
+  function stepIndex(s: Step) { return STEPS.findIndex(x => x.id === s); }
+
+  function placeOrder() {
+    clearCart();
+    setPlaced(true);
+  }
+
+  if (placed) {
+    return (
+      <div style={{ backgroundColor: "#0d1117", minHeight: "100vh" }}
+        className="flex items-center justify-center px-4">
+        <div className="text-center max-w-md">
+          <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+            style={{ background: "linear-gradient(135deg, #2dd4bf20, #0891b220)" }}>
+            <CheckCircle className="w-10 h-10" style={{ color: "#2dd4bf" }} />
+          </div>
+          <h1 className="text-2xl font-bold text-white mb-2">Order Submitted</h1>
+          <p className="text-sm mb-2" style={{ color: "#8b949e" }}>
+            Thank you for your research order. A confirmation will be sent to your email.
+          </p>
+          <p className="text-xs mb-8 p-3 rounded-lg" style={{ backgroundColor: "#f8514908", border: "1px solid #f8514920", color: "#8b949e" }}>
+            Your order may be subject to verification to ensure compliance with our research-only policy.
+            We will contact you if additional information is required.
+          </p>
+          <Link
+            href="/catalog"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all hover:scale-105"
+            style={{ background: "linear-gradient(135deg, #2dd4bf, #0891b2)", color: "#0d1117" }}
+          >
+            Continue Browsing
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <div style={{ backgroundColor: "#0d1117", minHeight: "100vh" }} className="flex items-center justify-center px-4">
+        <div className="text-center">
+          <p className="text-white text-lg mb-4">Your cart is empty.</p>
+          <Link href="/catalog" className="text-sm" style={{ color: "#2dd4bf" }}>Browse Catalog →</Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ backgroundColor: "#0d1117", minHeight: "100vh" }}>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <h1 className="text-2xl font-bold text-white mb-8">Secure Checkout</h1>
+
+        {/* Step indicator */}
+        <div className="flex items-center gap-2 mb-10 overflow-x-auto pb-2">
+          {STEPS.map((s, i) => (
+            <div key={s.id} className="flex items-center gap-2 shrink-0">
+              <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all`}
+                style={{
+                  backgroundColor: s.id === step ? "#2dd4bf20" : stepIndex(s.id) < stepIndex(step) ? "#2dd4bf10" : "#161b22",
+                  border: `1px solid ${s.id === step ? "#2dd4bf50" : stepIndex(s.id) < stepIndex(step) ? "#2dd4bf30" : "rgba(255,255,255,0.08)"}`,
+                  color: s.id === step ? "#2dd4bf" : stepIndex(s.id) < stepIndex(step) ? "#2dd4bf80" : "#8b949e",
+                }}>
+                <span className="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold"
+                  style={{ backgroundColor: s.id === step ? "#2dd4bf" : "transparent", color: "#0d1117" }}>
+                  {stepIndex(s.id) < stepIndex(step) ? "✓" : i + 1}
+                </span>
+                {s.label}
+              </div>
+              {i < STEPS.length - 1 && (
+                <div className="w-6 h-px" style={{ backgroundColor: "rgba(255,255,255,0.1)" }} />
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Form area */}
+          <div className="lg:col-span-2">
+            {step === "info" && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-bold text-white mb-2">Customer Information</h2>
+                <p className="text-xs mb-4" style={{ color: "#8b949e" }}>Institution or lab name is required for all orders.</p>
+                {[
+                  { label: "Full Name *", key: "name", type: "text", placeholder: "Dr. Jane Smith" },
+                  { label: "Institution / Lab Name *", key: "institution", type: "text", placeholder: "University Research Laboratory" },
+                  { label: "Email Address *", key: "email", type: "email", placeholder: "researcher@institution.edu" },
+                  { label: "Phone (optional)", key: "phone", type: "tel", placeholder: "+1 (555) 000-0000" },
+                ].map((f) => (
+                  <div key={f.key}>
+                    <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>
+                      {f.label}
+                    </label>
+                    <input
+                      type={f.type}
+                      value={info[f.key as keyof typeof info]}
+                      onChange={e => setInfo(i => ({ ...i, [f.key]: e.target.value }))}
+                      placeholder={f.placeholder}
+                      className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                      style={{ backgroundColor: "#161b22", border: "1px solid rgba(255,255,255,0.1)", color: "#e8edf2" }}
+                    />
+                  </div>
+                ))}
+                <button
+                  onClick={() => setStep("shipping")}
+                  disabled={!info.name || !info.institution || !info.email}
+                  className="w-full py-3.5 rounded-xl text-sm font-semibold transition-all hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed mt-2"
+                  style={{ background: "linear-gradient(135deg, #2dd4bf, #0891b2)", color: "#0d1117" }}
+                >
+                  Continue to Shipping
+                </button>
+              </div>
+            )}
+
+            {step === "shipping" && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-bold text-white mb-2">Shipping Details</h2>
+                {[
+                  { label: "Street Address *", key: "address", placeholder: "123 Research Drive" },
+                  { label: "City *", key: "city", placeholder: "Boston" },
+                  { label: "State / Province *", key: "state", placeholder: "MA" },
+                  { label: "ZIP / Postal Code *", key: "zip", placeholder: "02101" },
+                ].map((f) => (
+                  <div key={f.key}>
+                    <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>
+                      {f.label}
+                    </label>
+                    <input
+                      type="text"
+                      value={shipping[f.key as keyof typeof shipping]}
+                      onChange={e => setShipping(s => ({ ...s, [f.key]: e.target.value }))}
+                      placeholder={f.placeholder}
+                      className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                      style={{ backgroundColor: "#161b22", border: "1px solid rgba(255,255,255,0.1)", color: "#e8edf2" }}
+                    />
+                  </div>
+                ))}
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#8b949e" }}>
+                    Shipping Method
+                  </label>
+                  <div className="space-y-2">
+                    {[
+                      { id: "standard", label: "Standard Shipping", est: "5-7 business days", price: "Calculated at order" },
+                      { id: "express", label: "Express Shipping", est: "2-3 business days", price: "Calculated at order" },
+                    ].map((m) => (
+                      <button
+                        key={m.id}
+                        onClick={() => setShipping(s => ({ ...s, method: m.id }))}
+                        className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm text-left transition-all"
+                        style={{
+                          backgroundColor: shipping.method === m.id ? "#2dd4bf15" : "#161b22",
+                          border: `1px solid ${shipping.method === m.id ? "#2dd4bf50" : "rgba(255,255,255,0.08)"}`,
+                          color: shipping.method === m.id ? "#2dd4bf" : "#c9d1d9",
+                        }}
+                      >
+                        <div>
+                          <span className="font-medium">{m.label}</span>
+                          <span className="block text-xs mt-0.5" style={{ color: "#8b949e" }}>{m.est}</span>
+                        </div>
+                        <span className="text-xs">{m.price}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <button onClick={() => setStep("info")}
+                    className="flex-1 py-3.5 rounded-xl text-sm font-medium transition-all hover:bg-white/5"
+                    style={{ border: "1px solid rgba(255,255,255,0.12)", color: "#c9d1d9" }}>
+                    Back
+                  </button>
+                  <button
+                    onClick={() => setStep("payment")}
+                    disabled={!shipping.address || !shipping.city || !shipping.zip}
+                    className="flex-1 py-3.5 rounded-xl text-sm font-semibold transition-all hover:scale-105 disabled:opacity-40"
+                    style={{ background: "linear-gradient(135deg, #2dd4bf, #0891b2)", color: "#0d1117" }}
+                  >
+                    Continue to Payment
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {step === "payment" && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-bold text-white mb-2">Payment</h2>
+                <div className="p-5 rounded-xl border border-white/8" style={{ backgroundColor: "#161b22" }}>
+                  <div className="flex items-center gap-3 mb-4">
+                    <Lock className="w-4 h-4" style={{ color: "#2dd4bf" }} />
+                    <span className="text-sm font-medium text-white">Secure Payment</span>
+                    <ShieldCheck className="w-4 h-4 ml-auto" style={{ color: "#2dd4bf" }} />
+                  </div>
+                  <p className="text-xs mb-4" style={{ color: "#8b949e" }}>
+                    All transactions are processed over encrypted HTTPS connections. Payment details are never stored on our servers.
+                  </p>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>Card Number</label>
+                      <input type="text" placeholder="•••• •••• •••• ••••" className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                        style={{ backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", color: "#e8edf2" }} />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>Expiry</label>
+                        <input type="text" placeholder="MM / YY" className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                          style={{ backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", color: "#e8edf2" }} />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: "#8b949e" }}>CVV</label>
+                        <input type="text" placeholder="•••" className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                          style={{ backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.1)", color: "#e8edf2" }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <button onClick={() => setStep("shipping")}
+                    className="flex-1 py-3.5 rounded-xl text-sm font-medium transition-all hover:bg-white/5"
+                    style={{ border: "1px solid rgba(255,255,255,0.12)", color: "#c9d1d9" }}>
+                    Back
+                  </button>
+                  <button onClick={() => setStep("review")}
+                    className="flex-1 py-3.5 rounded-xl text-sm font-semibold transition-all hover:scale-105"
+                    style={{ background: "linear-gradient(135deg, #2dd4bf, #0891b2)", color: "#0d1117" }}>
+                    Review Order
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {step === "review" && (
+              <div className="space-y-5">
+                <h2 className="text-lg font-bold text-white mb-2">Review & Confirm Order</h2>
+
+                {/* Summary boxes */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {[
+                    { label: "Customer", lines: [info.name, info.institution, info.email] },
+                    { label: "Ship to", lines: [shipping.address, `${shipping.city}, ${shipping.state} ${shipping.zip}`] },
+                  ].map((box) => (
+                    <div key={box.label} className="p-4 rounded-xl border border-white/8" style={{ backgroundColor: "#161b22" }}>
+                      <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#8b949e" }}>{box.label}</p>
+                      {box.lines.map(l => <p key={l} className="text-sm text-white">{l}</p>)}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Products */}
+                <div className="rounded-xl border border-white/8 overflow-hidden" style={{ backgroundColor: "#161b22" }}>
+                  <div className="px-4 py-3 border-b border-white/8">
+                    <p className="text-sm font-semibold text-white">Order Items</p>
+                  </div>
+                  {items.map((item) => (
+                    <div key={`${item.product.id}-${item.selectedQty}`}
+                      className="flex items-center gap-3 px-4 py-3 border-b border-white/5 last:border-0">
+                      <FlaskConical className="w-5 h-5 shrink-0" style={{ color: "#2dd4bf" }} />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-white">{item.product.name}</p>
+                        <p className="text-xs" style={{ color: "#8b949e" }}>{item.selectedQty} × {item.quantity}</p>
+                      </div>
+                      <span className="font-semibold text-sm text-white">${(item.unitPrice * item.quantity).toFixed(2)}</span>
+                    </div>
+                  ))}
+                  <div className="px-4 py-3 border-t border-white/8 flex items-center justify-between">
+                    <span className="font-bold text-white">Total</span>
+                    <span className="font-bold text-lg" style={{ color: "#2dd4bf" }}>${total.toFixed(2)}</span>
+                  </div>
+                </div>
+
+                {/* Legal checkboxes */}
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3 p-4 rounded-xl"
+                    style={{ backgroundColor: "#f8514908", border: "1px solid #f8514920" }}>
+                    <input
+                      type="checkbox"
+                      id="confirm-research"
+                      checked={confirmResearch}
+                      onChange={e => setConfirmResearch(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 rounded cursor-pointer shrink-0"
+                      style={{ accentColor: "#2dd4bf" }}
+                    />
+                    <label htmlFor="confirm-research" className="text-xs leading-relaxed cursor-pointer" style={{ color: "#8b949e" }}>
+                      <strong className="text-white">I confirm that I am a qualified researcher</strong> or acting on behalf of a qualified institution.
+                      I understand that all products from Gills Bio Lab are sold strictly for laboratory research use only and
+                      will <strong className="text-white">not be used on humans or animals.</strong>
+                    </label>
+                  </div>
+                  <div className="flex items-start gap-3 p-4 rounded-xl"
+                    style={{ backgroundColor: "#2dd4bf08", border: "1px solid #2dd4bf20" }}>
+                    <input
+                      type="checkbox"
+                      id="confirm-terms"
+                      checked={confirmTerms}
+                      onChange={e => setConfirmTerms(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 rounded cursor-pointer shrink-0"
+                      style={{ accentColor: "#2dd4bf" }}
+                    />
+                    <label htmlFor="confirm-terms" className="text-xs leading-relaxed cursor-pointer" style={{ color: "#8b949e" }}>
+                      I agree to the{" "}
+                      <Link href="/legal/terms" className="underline" style={{ color: "#2dd4bf" }}>Terms & Conditions</Link>
+                      {" "}and{" "}
+                      <Link href="/legal/research-use" className="underline" style={{ color: "#2dd4bf" }}>Research Use Policy</Link>.
+                    </label>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-xs" style={{ color: "#8b949e" }}>
+                  <AlertTriangle className="w-3.5 h-3.5 shrink-0" style={{ color: "#e3b341" }} />
+                  Orders may be subject to verification to ensure compliance with research-only policy.
+                </div>
+
+                <div className="flex gap-3">
+                  <button onClick={() => setStep("payment")}
+                    className="flex-1 py-3.5 rounded-xl text-sm font-medium transition-all hover:bg-white/5"
+                    style={{ border: "1px solid rgba(255,255,255,0.12)", color: "#c9d1d9" }}>
+                    Back
+                  </button>
+                  <button
+                    onClick={placeOrder}
+                    disabled={!confirmResearch || !confirmTerms}
+                    className="flex-1 py-3.5 rounded-xl text-sm font-semibold transition-all hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
+                    style={{ background: "linear-gradient(135deg, #2dd4bf, #0891b2)", color: "#0d1117", boxShadow: "0 0 15px rgba(45,212,191,0.2)" }}
+                  >
+                    Place Research Order
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Order summary sidebar */}
+          <div>
+            <div className="rounded-xl border border-white/8 p-5 sticky top-24" style={{ backgroundColor: "#161b22" }}>
+              <h3 className="font-bold text-white mb-4 text-sm">Order Summary</h3>
+              <div className="space-y-2 mb-4">
+                {items.map((item) => (
+                  <div key={`${item.product.id}-${item.selectedQty}`}
+                    className="flex items-start gap-2 text-xs" style={{ color: "#8b949e" }}>
+                    <FlaskConical className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "#2dd4bf" }} />
+                    <span className="flex-1">{item.product.name} × {item.quantity}</span>
+                    <span>${(item.unitPrice * item.quantity).toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="border-t border-white/8 pt-3">
+                <div className="flex justify-between font-bold">
+                  <span className="text-white text-sm">Total</span>
+                  <span style={{ color: "#2dd4bf" }}>${total.toFixed(2)}</span>
+                </div>
+              </div>
+              <div className="mt-4 flex items-center gap-2 text-xs" style={{ color: "#8b949e" }}>
+                <Lock className="w-3.5 h-3.5 shrink-0" style={{ color: "#2dd4bf" }} />
+                SSL encrypted checkout
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
