@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ShoppingCart, FlaskConical, Star } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/lib/cart-context";
@@ -11,13 +12,17 @@ interface Props {
 
 export default function ProductCard({ product }: Props) {
   const { addItem } = useCart();
+  const router = useRouter();
   const [added, setAdded] = useState(false);
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault();
     addItem(product, product.prices[0].qty, product.prices[0].price, 1);
     setAdded(true);
-    setTimeout(() => setAdded(false), 1500);
+    setTimeout(() => {
+      setAdded(false);
+      router.push("/cart");
+    }, 800);
   }
 
   return (

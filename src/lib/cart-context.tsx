@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import type { Product } from "./products";
 
 export interface CartItem {
@@ -21,8 +21,28 @@ interface CartContextValue {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
+const STORAGE_KEY = "gills_cart";
+
+function loadCart(): CartItem[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+}
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] = useState<CartItem[]>(loadCart);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    } catch {
+      // storage unavailable
+    }
+  }, [items]);
 
   const addItem = useCallback(
     (product: Product, selectedQty: string, unitPrice: number, qty = 1) => {

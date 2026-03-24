@@ -2,6 +2,7 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ShoppingCart, ChevronRight, AlertTriangle, FlaskConical, Shield, Thermometer, Package } from "lucide-react";
 import { getProductBySlug, products } from "@/lib/products";
 import { useCart } from "@/lib/cart-context";
@@ -11,6 +12,7 @@ export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
   const product = getProductBySlug(slug);
   const { addItem } = useCart();
+  const router = useRouter();
   const [selectedPriceIdx, setSelectedPriceIdx] = useState(0);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
@@ -31,7 +33,10 @@ export default function ProductPage() {
   function handleAddToCart() {
     addItem(product, selectedPrice.qty, selectedPrice.price, qty);
     setAdded(true);
-    setTimeout(() => setAdded(false), 1600);
+    setTimeout(() => {
+      setAdded(false);
+      router.push("/cart");
+    }, 800);
   }
 
   const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
