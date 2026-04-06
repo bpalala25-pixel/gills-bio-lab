@@ -6,12 +6,12 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <div style={{ backgroundColor: "#0d1117", minHeight: "100vh" }}>
-      <div style={{ background: "linear-gradient(135deg, #161b22, #0d1117)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#2dd4bf" }}>Legal</span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white mt-2 mb-3">Terms &amp; Conditions</h1>
-          <p className="text-sm" style={{ color: "#8b949e" }}>Last updated: March 2026</p>
+    <div style={{ backgroundColor: "var(--bg-base)", minHeight: "100vh" }}>
+      <div style={{ background: "linear-gradient(160deg, #f0ede8 0%, #ede9f5 100%)", borderBottom: "1px solid rgba(28,25,23,0.08)" }}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-10">
+          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#01696f" }}>Legal</span>
+          <h1 className="text-3xl sm:text-4xl font-black mt-2 mb-3" style={{ color: "#1c1917", letterSpacing: "-0.02em" }}>Terms &amp; Conditions</h1>
+          <p className="text-sm" style={{ color: "#9c9590" }}>Last updated: March 2026</p>
         </div>
       </div>
 
@@ -19,10 +19,10 @@ export default function TermsPage() {
 
         {/* RUO Notice */}
         <div className="p-5 rounded-xl text-sm leading-relaxed"
-          style={{ backgroundColor: "#f8514908", border: "1px solid #f8514930", color: "#c9d1d9" }}>
-          <strong className="text-white block mb-1">Research Use Only — Important Notice</strong>
+          style={{ backgroundColor: "rgba(220,38,38,0.04)", border: "1px solid rgba(220,38,38,0.10)", color: "#6b6560" }}>
+          <strong style={{ color: "#1c1917" }} className="block mb-1">Research Use Only — Important Notice</strong>
           All products sold by Gills Bio Lab are peptide research chemicals intended exclusively for laboratory
-          and in vitro research use by qualified professionals. They are <strong className="text-white">not for
+          and in vitro research use by qualified professionals. They are <strong style={{ color: "#1c1917" }}>not for
           human or veterinary use</strong>, and are not drugs, foods, cosmetics, or dietary supplements.
         </div>
 
@@ -89,10 +89,10 @@ export default function TermsPage() {
           <p>These Terms are governed by applicable law. Any disputes shall be resolved in the applicable jurisdiction where Gills Bio Lab operates.</p>
         </Section>
 
-        <div className="pt-4 border-t border-white/8">
-          <p className="text-sm" style={{ color: "#8b949e" }}>
+        <div className="pt-4 border-t border-black/5">
+          <p className="text-sm" style={{ color: "#6b6560" }}>
             For questions about these Terms, contact us via the{" "}
-            <Link href="/contact" style={{ color: "#2dd4bf" }} className="underline">Contact page</Link>.
+            <Link href="/contact" style={{ color: "#01696f" }} className="underline">Contact page</Link>.
           </p>
         </div>
       </div>
@@ -103,8 +103,8 @@ export default function TermsPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="text-lg font-bold text-white mb-3">{title}</h2>
-      <div className="text-sm leading-relaxed space-y-3" style={{ color: "#8b949e" }}>
+      <h2 className="text-lg font-black mb-3" style={{ color: "#1c1917" }}>{title}</h2>
+      <div className="text-sm leading-relaxed space-y-3" style={{ color: "#6b6560" }}>
         {children}
       </div>
     </div>

@@ -6,12 +6,12 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div style={{ backgroundColor: "#0d1117", minHeight: "100vh" }}>
-      <div style={{ background: "linear-gradient(135deg, #161b22, #0d1117)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#2dd4bf" }}>Legal</span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white mt-2 mb-3">Privacy Policy</h1>
-          <p className="text-sm" style={{ color: "#8b949e" }}>Last updated: March 2026</p>
+    <div style={{ backgroundColor: "var(--bg-base)", minHeight: "100vh" }}>
+      <div style={{ background: "linear-gradient(160deg, #f0ede8 0%, #ede9f5 100%)", borderBottom: "1px solid rgba(28,25,23,0.08)" }}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-10">
+          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#01696f" }}>Legal</span>
+          <h1 className="text-3xl sm:text-4xl font-black mt-2 mb-3" style={{ color: "#1c1917", letterSpacing: "-0.02em" }}>Privacy Policy</h1>
+          <p className="text-sm" style={{ color: "#9c9590" }}>Last updated: March 2026</p>
         </div>
       </div>
 
@@ -58,7 +58,7 @@ export default function PrivacyPage() {
 
         <Section title="7. Your Rights">
           <p>Depending on your jurisdiction, you may have the right to access, correct, or request deletion of your personal information. To exercise these rights, contact us via the{" "}
-            <Link href="/contact" style={{ color: "#2dd4bf" }} className="underline">Contact page</Link>.
+            <Link href="/contact" style={{ color: "#01696f" }} className="underline">Contact page</Link>.
           </p>
         </Section>
 
@@ -66,10 +66,10 @@ export default function PrivacyPage() {
           <p>We may update this Privacy Policy from time to time. Continued use of the site after any update constitutes acceptance of the revised policy.</p>
         </Section>
 
-        <div className="pt-4 border-t border-white/8">
-          <p className="text-sm" style={{ color: "#8b949e" }}>
+        <div className="pt-4 border-t border-black/5">
+          <p className="text-sm" style={{ color: "#6b6560" }}>
             Questions?{" "}
-            <Link href="/contact" style={{ color: "#2dd4bf" }} className="underline">Contact Us</Link>.
+            <Link href="/contact" style={{ color: "#01696f" }} className="underline">Contact Us</Link>.
           </p>
         </div>
       </div>
@@ -80,8 +80,8 @@ export default function PrivacyPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="text-lg font-bold text-white mb-3">{title}</h2>
-      <div className="text-sm leading-relaxed space-y-3" style={{ color: "#8b949e" }}>
+      <h2 className="text-lg font-black mb-3" style={{ color: "#1c1917" }}>{title}</h2>
+      <div className="text-sm leading-relaxed space-y-3" style={{ color: "#6b6560" }}>
         {children}
       </div>
     </div>

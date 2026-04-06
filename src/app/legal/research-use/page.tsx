@@ -6,21 +6,21 @@ export const metadata = {
 
 export default function ResearchUsePage() {
   return (
-    <div style={{ backgroundColor: "#0d1117", minHeight: "100vh" }}>
-      <div style={{ background: "linear-gradient(135deg, #161b22, #0d1117)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#2dd4bf" }}>Legal</span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white mt-2 mb-3">Research Use Policy</h1>
-          <p className="text-sm" style={{ color: "#8b949e" }}>Last updated: March 2026</p>
+    <div style={{ backgroundColor: "var(--bg-base)", minHeight: "100vh" }}>
+      <div style={{ background: "linear-gradient(160deg, #f0ede8 0%, #ede9f5 100%)", borderBottom: "1px solid rgba(28,25,23,0.08)" }}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-10">
+          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#01696f" }}>Legal</span>
+          <h1 className="text-3xl sm:text-4xl font-black mt-2 mb-3" style={{ color: "#1c1917", letterSpacing: "-0.02em" }}>Research Use Policy</h1>
+          <p className="text-sm" style={{ color: "#9c9590" }}>Last updated: March 2026</p>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
 
         <div className="p-5 rounded-xl"
-          style={{ backgroundColor: "#f8514908", border: "1px solid #f8514930" }}>
-          <p className="text-sm font-bold text-white mb-1">All Products: For Laboratory Research Use Only</p>
-          <p className="text-sm leading-relaxed" style={{ color: "#c9d1d9" }}>
+          style={{ backgroundColor: "rgba(220,38,38,0.04)", border: "1px solid rgba(220,38,38,0.10)" }}>
+          <p className="text-sm font-bold mb-1" style={{ color: "#1c1917" }}>All Products: For Laboratory Research Use Only</p>
+          <p className="text-sm leading-relaxed" style={{ color: "#6b6560" }}>
             Not for human or veterinary use. Not a drug, food, cosmetic, or dietary supplement.
             Not for diagnostic, therapeutic, or clinical use.
           </p>
@@ -39,7 +39,7 @@ export default function ResearchUsePage() {
             <li>Pre-clinical research conducted in qualified laboratory settings</li>
             <li>Analytical chemistry and compound characterization</li>
           </ul>
-          <p className="mt-3">RUO does <strong className="text-white">not</strong> include and is expressly prohibited from:</p>
+          <p className="mt-3">RUO does <strong style={{ color: "#1c1917" }}>not</strong> include and is expressly prohibited from:</p>
           <ul>
             <li>Human use of any kind, including self-administration, injection, ingestion, or topical application</li>
             <li>Veterinary use or administration to animals</li>
@@ -81,12 +81,12 @@ export default function ResearchUsePage() {
           <p>Gills Bio Lab reserves the right to refuse, cancel, or refund any order where we have reason to believe the products will be used in violation of this policy. We maintain records of all checkout acknowledgments and will cooperate with regulatory authorities as required by law.</p>
         </Section>
 
-        <div className="pt-4 border-t border-white/8">
-          <p className="text-sm" style={{ color: "#8b949e" }}>
+        <div className="pt-4 border-t border-black/5">
+          <p className="text-sm" style={{ color: "#6b6560" }}>
             Questions about this policy?{" "}
-            <Link href="/contact" style={{ color: "#2dd4bf" }} className="underline">Contact Us</Link>.
+            <Link href="/contact" style={{ color: "#01696f" }} className="underline">Contact Us</Link>.
             See also:{" "}
-            <Link href="/legal/terms" style={{ color: "#2dd4bf" }} className="underline">Terms &amp; Conditions</Link>.
+            <Link href="/legal/terms" style={{ color: "#01696f" }} className="underline">Terms &amp; Conditions</Link>.
           </p>
         </div>
       </div>
@@ -97,8 +97,8 @@ export default function ResearchUsePage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="text-lg font-bold text-white mb-3">{title}</h2>
-      <div className="text-sm leading-relaxed space-y-3" style={{ color: "#8b949e" }}>
+      <h2 className="text-lg font-black mb-3" style={{ color: "#1c1917" }}>{title}</h2>
+      <div className="text-sm leading-relaxed space-y-3" style={{ color: "#6b6560" }}>
         {children}
       </div>
     </div>

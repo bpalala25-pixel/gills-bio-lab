@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ backgroundColor: "#0d1117", color: "#e8edf2" }}>
+        style={{ backgroundColor: "#f7f5f2", color: "#1c1917" }}>
         <ErrorReporter />
         <Script
           src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts//route-messenger.js"
@@ -49,8 +49,8 @@ export default function RootLayout({
           <Navbar />
           {/* Site-wide RUO compliance bar */}
           <div className="fixed top-16 left-0 right-0 z-40 text-center text-[11px] font-medium py-1.5 px-4"
-            style={{ backgroundColor: "#0a0e14", borderBottom: "1px solid rgba(248,81,73,0.2)", color: "#8b949e" }}>
-            <span style={{ color: "#f85149" }} className="font-semibold">Research Use Only</span>
+            style={{ backgroundColor: "rgba(220,38,38,0.05)", borderBottom: "1px solid rgba(220,38,38,0.12)", color: "#9c9590" }}>
+            <span style={{ color: "#b91c1c" }} className="font-semibold">Research Use Only</span>
             {" "}— All products are for qualified laboratory use only. Not for human or veterinary use.{" "}
             Not a drug, food, cosmetic, or dietary supplement.
           </div>
