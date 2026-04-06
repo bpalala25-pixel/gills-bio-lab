@@ -147,7 +147,7 @@ export const products: Product[] = [
   {
     id: "mots-c",
     slug: "mots-c",
-    image: "/images/mots-c.webp",
+    image: "/images/mots-c.png",
     name: "MOTS-C",
     code: "MOTS",
     category: "Mitochondrial Research",
