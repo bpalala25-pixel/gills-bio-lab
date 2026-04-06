@@ -179,6 +179,40 @@
   transform: translateY(0);
 }
 
+/* Retatrutide 3D vial animations */
+@keyframes vial-float {
+  0%, 100% { transform: perspective(900px) rotateY(-18deg) rotateX(4deg) translateY(0px); }
+  50%       { transform: perspective(900px) rotateY(-18deg) rotateX(4deg) translateY(-16px); }
+}
+@keyframes vial-float-back {
+  0%, 100% { transform: perspective(900px) rotateY(-28deg) rotateX(6deg) translateY(-8px) scale(0.88); }
+  50%       { transform: perspective(900px) rotateY(-28deg) rotateX(6deg) translateY(-24px) scale(0.88); }
+}
+@keyframes beam-sweep {
+  0%, 100% { opacity: 0.4; transform: translateX(-10px) scaleX(1); }
+  50%       { opacity: 0.7; transform: translateX(10px) scaleX(1.1); }
+}
+@keyframes orbit-1 {
+  0%   { transform: rotate(0deg)   translateX(160px) rotate(0deg);   }
+  100% { transform: rotate(360deg) translateX(160px) rotate(-360deg); }
+}
+@keyframes orbit-2 {
+  0%   { transform: rotate(120deg) translateX(140px) rotate(-120deg); }
+  100% { transform: rotate(480deg) translateX(140px) rotate(-480deg); }
+}
+@keyframes orbit-3 {
+  0%   { transform: rotate(240deg) translateX(175px) rotate(-240deg); }
+  100% { transform: rotate(600deg) translateX(175px) rotate(-600deg); }
+}
+@keyframes holo-shift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+.vial-3d-front { animation: vial-float 5s ease-in-out infinite; }
+.vial-3d-back  { animation: vial-float-back 5s ease-in-out infinite; animation-delay: -1.5s; }
+.beam-anim     { animation: beam-sweep 4s ease-in-out infinite; }
+
 /* Teal glow effects */
 .glow-teal {
   box-shadow: 0 0 20px rgba(45, 212, 191, 0.3), 0 0 40px rgba(45, 212, 191, 0.1);
