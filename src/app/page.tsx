@@ -266,61 +266,109 @@ export default function HomePage() {
       <section className="py-24" style={{ backgroundColor: "var(--bg-base)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealSection>
-            <div className="glass-card rounded-3xl overflow-hidden relative">
-              {/* Background texture */}
-              <div className="absolute inset-0 pointer-events-none"
-                style={{ background: "radial-gradient(ellipse 55% 70% at 85% 50%, rgba(139,92,246,0.06) 0%, transparent 65%)" }} />
+            <div className="rounded-3xl overflow-hidden relative"
+              style={{
+                background: "linear-gradient(135deg, rgba(1,105,111,0.06) 0%, rgba(255,255,255,0.80) 40%, rgba(139,92,246,0.05) 100%)",
+                border: "1px solid rgba(255,255,255,0.90)",
+                boxShadow: "0 4px 40px rgba(28,25,23,0.08), inset 0 1px 0 rgba(255,255,255,0.80)",
+                backdropFilter: "blur(20px)",
+              }}>
+              {/* Layered background orbs */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full"
+                  style={{ background: "radial-gradient(circle, rgba(139,92,246,0.09) 0%, transparent 65%)", filter: "blur(40px)", transform: "translate(30%, -30%)" }} />
+                <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full"
+                  style={{ background: "radial-gradient(circle, rgba(1,105,111,0.09) 0%, transparent 65%)", filter: "blur(32px)", transform: "translate(-20%, 20%)" }} />
+              </div>
 
               <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 p-10 lg:p-16 items-center">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] mb-3 block" style={{ color: "#01696f" }}>
+                  <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] mb-4 block" style={{ color: "#01696f" }}>
+                    <span className="w-1 h-1 rounded-full" style={{ backgroundColor: "#01696f" }} />
                     Documentation & Quality
                   </span>
                   <h2 className="text-3xl font-black mb-5" style={{ color: "#1c1917", letterSpacing: "-0.02em" }}>
-                    Quality & Documentation
+                    Quality you can{" "}
+                    <span style={{
+                      background: "linear-gradient(135deg, #01696f, #7c3aed)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}>verify.</span>
                   </h2>
-                  <p className="text-sm leading-relaxed mb-6" style={{ color: "#6b6560" }}>
+                  <p className="text-sm leading-relaxed mb-7" style={{ color: "#6b6560" }}>
                     Research demands more than access to compounds — it requires confidence in what is being used.
-                    Gills Bio Lab operates with a focus on consistency and traceability.
+                    Gills Bio Lab operates with a focus on consistency, lot traceability, and responsive documentation.
                   </p>
-                  <ul className="space-y-3 mb-8">
+                  <ul className="space-y-3.5 mb-8">
                     {[
-                      { icon: ShieldCheck, text: "Lot-focused: Batches tracked and documented for internal quality standards." },
-                      { icon: Truck,       text: "Storage & handling: Shipped under conditions intended to preserve integrity." },
-                      { icon: BookOpen,    text: "Documentation: Lot-specific info available to qualified customers on request." },
+                      { icon: ShieldCheck, text: "Lot-focused batches tracked and documented for internal quality standards.", accent: "teal" },
+                      { icon: Truck,       text: "Cold-chain aware shipping designed to preserve compound integrity in transit.", accent: "orchid" },
+                      { icon: BookOpen,    text: "Lot-specific CoA and documentation available to qualified researchers on request.", accent: "teal" },
                     ].map((item) => (
-                      <li key={item.text} className="flex items-start gap-3 text-sm" style={{ color: "#3d3833" }}>
-                        <item.icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "#01696f" }} />
-                        {item.text}
+                      <li key={item.text} className="flex items-start gap-3">
+                        <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
+                          style={{
+                            background: item.accent === "teal"
+                              ? "linear-gradient(135deg, rgba(1,105,111,0.12), rgba(1,105,111,0.05))"
+                              : "linear-gradient(135deg, rgba(139,92,246,0.12), rgba(139,92,246,0.05))",
+                          }}>
+                          <item.icon className="w-3.5 h-3.5" style={{ color: item.accent === "teal" ? "#01696f" : "#7c3aed" }} />
+                        </div>
+                        <span className="text-sm leading-relaxed" style={{ color: "#3d3833" }}>{item.text}</span>
                       </li>
                     ))}
                   </ul>
                   <Link href="/quality"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all hover:scale-105"
+                    className="btn-shimmer inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all hover:scale-105 hover:-translate-y-0.5"
                     style={{
                       background: "linear-gradient(135deg, #01696f, #018a92)",
                       color: "#ffffff",
-                      boxShadow: "0 4px 20px rgba(1,105,111,0.25)",
+                      boxShadow: "0 6px 24px rgba(1,105,111,0.30), inset 0 1px 0 rgba(255,255,255,0.15)",
                     }}>
                     View Quality Details
                     <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
 
-                {/* Decorative rings */}
+                {/* Decorative ring cluster */}
                 <div className="flex items-center justify-center">
-                  <div className="relative w-56 h-56">
+                  <div className="relative w-64 h-64">
+                    {/* Outer glow */}
                     <div className="absolute inset-0 rounded-full"
-                      style={{ background: "radial-gradient(circle, rgba(1,105,111,0.08), transparent 70%)" }} />
-                    <div className="absolute inset-6 rounded-full border-2"
-                      style={{ borderColor: "rgba(1,105,111,0.12)", borderTopColor: "rgba(1,105,111,0.45)", animation: "spin 20s linear infinite" }} />
-                    <div className="absolute inset-12 rounded-full border"
-                      style={{ borderColor: "rgba(139,92,246,0.10)", borderTopColor: "rgba(139,92,246,0.45)", animation: "spin 12s linear infinite reverse" }} />
+                      style={{ background: "radial-gradient(circle, rgba(1,105,111,0.10) 0%, rgba(139,92,246,0.06) 50%, transparent 70%)" }} />
+                    {/* Rings */}
+                    <div className="absolute inset-4 rounded-full"
+                      style={{ border: "1.5px solid rgba(1,105,111,0.08)", borderTopColor: "rgba(1,105,111,0.40)", borderRightColor: "rgba(139,92,246,0.25)", animation: "spin 22s linear infinite" }} />
+                    <div className="absolute inset-10 rounded-full"
+                      style={{ border: "1.5px solid rgba(139,92,246,0.07)", borderTopColor: "rgba(139,92,246,0.40)", borderLeftColor: "rgba(1,105,111,0.20)", animation: "spin 14s linear infinite reverse" }} />
+                    <div className="absolute inset-16 rounded-full"
+                      style={{ border: "1px solid rgba(1,105,111,0.06)", borderTopColor: "rgba(1,105,111,0.30)", animation: "spin 8s linear infinite" }} />
+                    {/* Center icon */}
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <svg className="w-14 h-14" style={{ color: "#01696f" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                          d="M9 3h6M9 3v6l-4 10a1 1 0 001 1.5h12A1 1 0 0019 19l-4-10V3M9 3H7m8 0h2"/>
-                      </svg>
+                      <div className="w-20 h-20 rounded-2xl flex items-center justify-center"
+                        style={{
+                          background: "linear-gradient(135deg, rgba(1,105,111,0.12), rgba(139,92,246,0.08))",
+                          border: "1px solid rgba(255,255,255,0.80)",
+                          boxShadow: "0 8px 32px rgba(1,105,111,0.14), inset 0 1px 0 rgba(255,255,255,0.60)",
+                        }}>
+                        <svg className="w-9 h-9" style={{ color: "#01696f" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                            d="M9 3h6M9 3v6l-4 10a1 1 0 001 1.5h12A1 1 0 0019 19l-4-10V3M9 3H7m8 0h2"/>
+                        </svg>
+                      </div>
+                    </div>
+                    {/* Orbiting dot — teal */}
+                    <div className="absolute inset-4"
+                      style={{ animation: "spin 22s linear infinite" }}>
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full"
+                        style={{ background: "radial-gradient(circle, #01696f, #018a92)", boxShadow: "0 0 8px rgba(1,105,111,0.6)" }} />
+                    </div>
+                    {/* Orbiting dot — orchid */}
+                    <div className="absolute inset-10"
+                      style={{ animation: "spin 14s linear infinite reverse" }}>
+                      <div className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 w-2 h-2 rounded-full"
+                        style={{ background: "radial-gradient(circle, #8b5cf6, #7c3aed)", boxShadow: "0 0 6px rgba(139,92,246,0.6)" }} />
                     </div>
                   </div>
                 </div>
