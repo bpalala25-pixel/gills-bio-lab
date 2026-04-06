@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { CheckCircle, ShieldCheck, Lock, FlaskConical, AlertTriangle } from "lucide-react";
+import { CheckCircle, FlaskConical, AlertTriangle } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 
 type Step = "info" | "shipping" | "payment" | "review";
@@ -34,7 +34,7 @@ export default function CheckoutPage() {
 
   const [info, setInfo] = useState({ name: "", institution: "", role: "", email: "", phone: "" });
   const [shipping, setShipping] = useState({ address: "", city: "", state: "", zip: "", country: "US", method: "standard" });
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto" | "cashapp">("card");
+  const [paymentMethod, setPaymentMethod] = useState<"crypto" | "cashapp">("cashapp");
   const [selectedCoin, setSelectedCoin] = useState<typeof CRYPTO_COINS[number]["id"]>("usdc");
   const [copied, setCopied] = useState(false);
   const [confirmResearch, setConfirmResearch] = useState(false);
@@ -294,11 +294,10 @@ export default function CheckoutPage() {
                 <h2 className="text-lg font-black mb-2" style={{ color: "#1c1917" }}>Payment</h2>
 
                 {/* Payment method selector */}
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   {[
-                    { id: "card" as const, label: "Credit Card", icon: "💳", desc: "Visa, MC, Amex" },
                     { id: "cashapp" as const, label: "Cash App", icon: "💚", desc: "$Cashtag" },
-                    { id: "crypto" as const, label: "Crypto", icon: "₿", desc: "BTC, ETH, USDC" },
+                    { id: "crypto" as const, label: "Crypto", icon: "₿", desc: "BTC, ETH, USDC — 10% off" },
                   ].map((m) => (
                     <button
                       key={m.id}
@@ -315,39 +314,6 @@ export default function CheckoutPage() {
                     </button>
                   ))}
                 </div>
-
-                {/* Card form */}
-                {paymentMethod === "card" && (
-                  <div className="glass-card p-5 rounded-2xl">
-                    <div className="flex items-center gap-3 mb-4">
-                      <Lock className="w-4 h-4" style={{ color: "#01696f" }} />
-                      <span className="text-sm font-black" style={{ color: "#1c1917" }}>Secure Card Payment</span>
-                      <ShieldCheck className="w-4 h-4 ml-auto" style={{ color: "#01696f" }} />
-                    </div>
-                    <p className="text-xs mb-4" style={{ color: "#9c9590" }}>
-                      All transactions are encrypted. Card details are never stored on our servers.
-                    </p>
-                    <div className="space-y-3">
-                      <div>
-                        <label className="block text-xs font-bold uppercase tracking-widest mb-1.5" style={labelStyle}>Card Number</label>
-                        <input type="text" placeholder="•••• •••• •••• ••••" className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                          style={inputStyle} />
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-xs font-bold uppercase tracking-widest mb-1.5" style={labelStyle}>Expiry</label>
-                          <input type="text" placeholder="MM / YY" className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                            style={inputStyle} />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-bold uppercase tracking-widest mb-1.5" style={labelStyle}>CVV</label>
-                          <input type="text" placeholder="•••" className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                            style={inputStyle} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
 
                 {/* Cash App form */}
                 {paymentMethod === "cashapp" && (
@@ -519,7 +485,7 @@ export default function CheckoutPage() {
                   {[
                     { label: "Customer", lines: [info.name, info.institution, info.email] },
                     { label: "Ship to", lines: [shipping.address, `${shipping.city}, ${shipping.state} ${shipping.zip}`] },
-                    { label: "Payment", lines: [paymentMethod === "card" ? "💳 Credit Card" : paymentMethod === "cashapp" ? `💚 Cash App (${CASHAPP_TAG})` : `₿ Crypto — ${activeCoin.symbol} (10% discount applied)`] },
+                    { label: "Payment", lines: [paymentMethod === "cashapp" ? `💚 Cash App (${CASHAPP_TAG})` : `₿ Crypto — ${activeCoin.symbol} (10% discount applied)`] },
                   ].map((box) => (
                     <div key={box.label} className="glass-card p-4 rounded-xl">
                       <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: "#9c9590" }}>{box.label}</p>
