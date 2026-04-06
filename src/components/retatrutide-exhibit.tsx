@@ -1,48 +1,42 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronRight } from "lucide-react";
-import VialImage from "@/components/vial-image";
 
-/* ─── tiny inline style block so keyframes are self-contained ─────────────── */
 const styles = `
 @keyframes ret-float {
-  0%,100% { transform: perspective(900px) rotateY(-18deg) rotateX(5deg) translateY(0px); }
-  50%      { transform: perspective(900px) rotateY(-18deg) rotateX(5deg) translateY(-18px); }
-}
-@keyframes ret-float-back {
-  0%,100% { transform: perspective(900px) rotateY(-26deg) rotateX(7deg) translateY(-6px) scale(0.84); }
-  50%      { transform: perspective(900px) rotateY(-26deg) rotateX(7deg) translateY(-24px) scale(0.84); }
+  0%,100% { transform: perspective(900px) rotateY(-14deg) rotateX(4deg) translateY(0px); }
+  50%      { transform: perspective(900px) rotateY(-14deg) rotateX(4deg) translateY(-20px); }
 }
 @keyframes ret-glow-pulse {
-  0%,100% { opacity: 0.55; transform: scale(1); }
-  50%      { opacity: 0.85; transform: scale(1.06); }
+  0%,100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
+  50%      { opacity: 0.85; transform: translate(-50%,-50%) scale(1.08); }
 }
 @keyframes ret-scan {
   0%   { transform: translateY(-100%); opacity: 0; }
-  20%  { opacity: 0.6; }
-  80%  { opacity: 0.6; }
-  100% { transform: translateY(400%); opacity: 0; }
+  20%  { opacity: 0.5; }
+  80%  { opacity: 0.5; }
+  100% { transform: translateY(500%); opacity: 0; }
 }
 @keyframes ret-orbit {
   0%   { transform: rotate(0deg)   translateX(var(--r)) rotate(0deg);   }
   100% { transform: rotate(360deg) translateX(var(--r)) rotate(-360deg); }
 }
 @keyframes ret-beam {
-  0%,100% { opacity: 0.12; }
-  50%     { opacity: 0.28; }
+  0%,100% { opacity: 0.10; }
+  50%     { opacity: 0.22; }
 }
 .ret-vial-front { animation: ret-float      5.5s ease-in-out infinite; }
-.ret-vial-back  { animation: ret-float-back 5.5s ease-in-out infinite; animation-delay:-2s; }
 .ret-glow       { animation: ret-glow-pulse 3.5s ease-in-out infinite; }
-.ret-scan       { animation: ret-scan       3.2s ease-in-out infinite; }
-.ret-beam       { animation: ret-beam       4s ease-in-out infinite; }
+.ret-scan       { animation: ret-scan       3.4s ease-in-out infinite; }
+.ret-beam       { animation: ret-beam       4s   ease-in-out infinite; }
 `;
 
 const RECEPTOR_PILLS = [
-  { label: "GIP",      color: "#22c55e", r: "150px", dur: "7s",  delay: "0s"    },
-  { label: "GLP-1",    color: "#2dd4bf", r: "135px", dur: "9s",  delay: "-3s"   },
-  { label: "Glucagon", color: "#a78bfa", r: "162px", dur: "11s", delay: "-5.5s" },
+  { label: "GIP",      color: "#22c55e", r: "148px", dur: "7s",    delay: "0s"    },
+  { label: "GLP-1",    color: "#2dd4bf", r: "132px", dur: "9.5s",  delay: "-3.2s" },
+  { label: "Glucagon", color: "#a78bfa", r: "158px", dur: "11.5s", delay: "-5.8s" },
 ];
 
 export default function RetatrutideExhibit() {
@@ -55,36 +49,29 @@ export default function RetatrutideExhibit() {
 
         {/* ── background atmosphere ── */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Large center bloom */}
           <div className="ret-glow absolute"
             style={{
-              width: 700, height: 700,
-              top: "50%", left: "55%",
-              transform: "translate(-50%,-50%)",
+              width: 680, height: 680,
+              top: "50%", left: "62%",
               borderRadius: "50%",
-              background: "radial-gradient(circle, rgba(34,197,94,0.09) 0%, transparent 60%)",
+              background: "radial-gradient(circle, rgba(34,197,94,0.10) 0%, transparent 60%)",
             }} />
-
-          {/* Light beams */}
           {[
-            { left: "42%", rotate: "-35deg", w: 280, delay: "0s" },
-            { left: "58%", rotate: "20deg",  w: 200, delay: "1.8s" },
-            { left: "70%", rotate: "-10deg", w: 160, delay: "0.9s" },
+            { left: "45%", rotate: "-32deg", w: 260, delay: "0s"   },
+            { left: "60%", rotate: "18deg",  w: 190, delay: "1.8s" },
+            { left: "72%", rotate: "-8deg",  w: 150, delay: "0.9s" },
           ].map((b, i) => (
             <div key={i} className="ret-beam absolute"
               style={{
-                top: 0, left: b.left,
-                width: b.w, height: "100%",
-                background: "linear-gradient(to bottom, rgba(34,197,94,0.12) 0%, transparent 100%)",
+                top: 0, left: b.left, width: b.w, height: "100%",
+                background: "linear-gradient(to bottom, rgba(34,197,94,0.13) 0%, transparent 100%)",
                 transform: `rotate(${b.rotate})`,
                 transformOrigin: "top center",
                 animationDelay: b.delay,
               }} />
           ))}
-
-          {/* Subtle grid */}
           <div className="absolute inset-0" style={{
-            backgroundImage: "linear-gradient(rgba(34,197,94,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.03) 1px, transparent 1px)",
+            backgroundImage: "linear-gradient(rgba(34,197,94,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.025) 1px, transparent 1px)",
             backgroundSize: "48px 48px",
           }} />
         </div>
@@ -130,7 +117,6 @@ export default function RetatrutideExhibit() {
                     style={{
                       background: `linear-gradient(145deg, ${color}0a, ${color}05)`,
                       border: `1px solid ${color}22`,
-                      backdropFilter: "blur(8px)",
                     }}>
                     <div className="w-2 h-2 rounded-full mx-auto mb-2.5"
                       style={{ backgroundColor: color, boxShadow: `0 0 8px ${color}` }} />
@@ -140,43 +126,31 @@ export default function RetatrutideExhibit() {
                 ))}
               </div>
 
-              {/* Specs row */}
+              {/* Specs */}
               <div className="flex gap-8 mb-8">
                 {[
-                  { label: "Purity",  value: "≥ 99%" },
-                  { label: "Form",    value: "Lyophilized" },
-                  { label: "Storage", value: "−20°C" },
+                  { label: "Purity",   value: "≥ 99%"      },
+                  { label: "Quantity", value: "30 mg"       },
+                  { label: "Storage",  value: "−20°C"       },
                 ].map(({ label, value }) => (
                   <div key={label}>
                     <div className="text-[10px] uppercase tracking-[0.15em] font-semibold mb-1"
-                      style={{ color: "#3d5448" }}>
-                      {label}
-                    </div>
+                      style={{ color: "#3d5448" }}>{label}</div>
                     <div className="text-lg font-black" style={{ color: "#22c55e" }}>{value}</div>
                   </div>
                 ))}
               </div>
 
-              {/* CTA buttons */}
+              {/* CTA */}
               <div className="flex flex-wrap gap-3 mb-4">
-                <Link href="/catalog/retatrutide-10"
+                <Link href="/catalog/retatrutide"
                   className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95"
                   style={{
                     background: "linear-gradient(135deg, #22c55e 0%, #15803d 100%)",
                     color: "#fff",
                     boxShadow: "0 0 28px rgba(34,197,94,0.35), inset 0 1px 0 rgba(255,255,255,0.15)",
                   }}>
-                  10 mg — $179
-                  <ChevronRight className="w-4 h-4" />
-                </Link>
-                <Link href="/catalog/retatrutide-20"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95"
-                  style={{
-                    background: "rgba(34,197,94,0.06)",
-                    border: "1px solid rgba(34,197,94,0.28)",
-                    color: "#22c55e",
-                  }}>
-                  20 mg — $219
+                  Order — $219
                   <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -188,24 +162,22 @@ export default function RetatrutideExhibit() {
 
             {/* ━━━ RIGHT: 3D VIAL STAGE ━━━ */}
             <div className="order-1 lg:order-2 flex items-center justify-center">
-              <div className="relative" style={{ width: 380, height: 420 }}>
+              <div className="relative" style={{ width: 360, height: 420 }}>
 
-                {/* Radial glow under vials */}
-                <div className="absolute ret-glow"
+                {/* Glow bloom */}
+                <div className="ret-glow absolute"
                   style={{
-                    width: 340, height: 340,
+                    width: 320, height: 320,
                     top: "50%", left: "50%",
-                    transform: "translate(-50%,-50%)",
                     borderRadius: "50%",
-                    background: "radial-gradient(circle, rgba(34,197,94,0.14) 0%, transparent 65%)",
+                    background: "radial-gradient(circle, rgba(34,197,94,0.16) 0%, transparent 65%)",
                   }} />
 
-                {/* Orbiting receptor dots */}
+                {/* Orbiting receptor pills */}
                 {RECEPTOR_PILLS.map(({ label, color, r, dur, delay }) => (
-                  <div key={label}
-                    className="absolute"
+                  <div key={label} className="absolute"
                     style={{
-                      top: "50%", left: "50%",
+                      top: "46%", left: "50%",
                       "--r": r,
                       animation: `ret-orbit ${dur} linear infinite`,
                       animationDelay: delay,
@@ -224,47 +196,33 @@ export default function RetatrutideExhibit() {
                   </div>
                 ))}
 
-                {/* ── VIAL: 20 mg (back / bigger) ── */}
-                <div className="ret-vial-back absolute"
-                  style={{
-                    width: 175, height: 290,
-                    top: "6%", left: "52%",
-                    transformOrigin: "center bottom",
-                    filter: "drop-shadow(0 24px 48px rgba(0,0,0,0.7)) drop-shadow(0 0 20px rgba(34,197,94,0.18))",
-                  }}>
-                  <VialImage name="Retatrutide" quantity="20 mg / vial"
-                    capColor="#22c55e" labelColor="#22c55e"
-                    className="w-full h-full" />
-                  {/* Scan line */}
-                  <div className="ret-scan absolute inset-x-0 h-8 pointer-events-none"
-                    style={{ background: "linear-gradient(to bottom, transparent, rgba(34,197,94,0.18), transparent)" }} />
-                  {/* Price tag */}
-                  <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-center">
-                    <div className="text-xs font-bold text-white">20 mg</div>
-                    <div className="text-[10px]" style={{ color: "#22c55e" }}>$219</div>
-                  </div>
-                </div>
-
-                {/* ── VIAL: 10 mg (front / hero) ── */}
+                {/* ── SINGLE VIAL ── */}
                 <div className="ret-vial-front absolute"
                   style={{
-                    width: 195, height: 320,
-                    top: "4%", left: "10%",
+                    width: 220, height: 340,
+                    top: "4%", left: "50%",
+                    marginLeft: -110,
                     transformOrigin: "center bottom",
-                    filter: "drop-shadow(0 32px 60px rgba(0,0,0,0.80)) drop-shadow(0 0 30px rgba(34,197,94,0.22))",
+                    filter: "drop-shadow(0 32px 64px rgba(0,0,0,0.85)) drop-shadow(0 0 32px rgba(34,197,94,0.25))",
                     zIndex: 2,
                   }}>
-                  <VialImage name="Retatrutide" quantity="10 mg / vial"
-                    capColor="#22c55e" labelColor="#22c55e"
-                    className="w-full h-full" />
+                  <div className="relative w-full h-full">
+                    <Image
+                      src="/images/retatrutide.png"
+                      alt="Retatrutide 30 mg"
+                      fill
+                      className="object-contain"
+                      sizes="220px"
+                      priority
+                    />
+                  </div>
+
                   {/* Scan line */}
                   <div className="ret-scan absolute inset-x-0 h-10 pointer-events-none"
-                    style={{
-                      background: "linear-gradient(to bottom, transparent, rgba(34,197,94,0.22), transparent)",
-                      animationDelay: "-1.2s",
-                    }} />
+                    style={{ background: "linear-gradient(to bottom, transparent, rgba(168,139,250,0.20), transparent)" }} />
+
                   {/* Purity badge */}
-                  <div className="absolute -top-3 right-0 px-2.5 py-1 rounded-full text-[10px] font-bold"
+                  <div className="absolute -top-2 -right-4 px-2.5 py-1 rounded-full text-[10px] font-bold"
                     style={{
                       backgroundColor: "#22c55e18",
                       border: "1px solid #22c55e40",
@@ -272,28 +230,29 @@ export default function RetatrutideExhibit() {
                     }}>
                     ≥ 99% Pure
                   </div>
+
                   {/* Price tag */}
-                  <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-center">
-                    <div className="text-xs font-bold text-white">10 mg</div>
-                    <div className="text-[10px]" style={{ color: "#22c55e" }}>$179</div>
+                  <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
+                    <div className="text-sm font-bold text-white">30 mg</div>
+                    <div className="text-xs" style={{ color: "#22c55e" }}>$219 / vial</div>
                   </div>
                 </div>
 
-                {/* Floor reflection */}
-                <div className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none"
+                {/* Floor reflection line */}
+                <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
                   style={{
-                    background: "linear-gradient(to top, rgba(34,197,94,0.05), transparent)",
-                    borderTop: "1px solid rgba(34,197,94,0.08)",
+                    background: "linear-gradient(to top, rgba(34,197,94,0.06), transparent)",
+                    borderTop: "1px solid rgba(34,197,94,0.07)",
                   }} />
 
-                {/* Triple agonist badge */}
-                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2">
+                {/* Bottom badge */}
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2">
                   <div className="px-4 py-1.5 rounded-full text-[11px] font-bold whitespace-nowrap"
                     style={{
-                      background: "linear-gradient(135deg, rgba(34,197,94,0.15), rgba(45,212,191,0.1))",
-                      border: "1px solid rgba(34,197,94,0.3)",
+                      background: "linear-gradient(135deg, rgba(34,197,94,0.14), rgba(45,212,191,0.09))",
+                      border: "1px solid rgba(34,197,94,0.28)",
                       color: "#22c55e",
-                      boxShadow: "0 0 16px rgba(34,197,94,0.15)",
+                      boxShadow: "0 0 16px rgba(34,197,94,0.12)",
                     }}>
                     GIP · GLP-1 · Glucagon
                   </div>
