@@ -3,17 +3,21 @@ import { ShieldCheck, Thermometer, BookOpen, ChevronRight, FlaskConical, CheckCi
 
 export default function QualityPage() {
   return (
-    <div style={{ backgroundColor: "#0d1117", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "var(--bg-base)", minHeight: "100vh" }}>
       {/* Hero */}
-      <div style={{ background: "linear-gradient(135deg, #161b22, #0d1117)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#2dd4bf" }}>
+      <div style={{
+        background: "linear-gradient(160deg, #f0ede8 0%, #ede9f5 100%)",
+        borderBottom: "1px solid rgba(28,25,23,0.08)",
+      }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 text-center">
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "#01696f" }}>
             Quality & Documentation
           </span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white mt-2 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-black mt-2 mb-4"
+            style={{ color: "#1c1917", letterSpacing: "-0.03em" }}>
             Confidence in Every Compound
           </h1>
-          <p className="text-lg max-w-2xl mx-auto" style={{ color: "#8b949e" }}>
+          <p className="text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: "#6b6560" }}>
             Research demands more than just access to compounds — it requires confidence in what is being used.
             Gills Bio Lab operates with a focus on consistency and traceability.
           </p>
@@ -40,24 +44,24 @@ export default function QualityPage() {
               desc: "Lot-specific information and documentation are available to qualified customers upon request. We support your institutional documentation requirements.",
             },
           ].map((p) => (
-            <div key={p.title} className="p-6 rounded-xl border border-white/8 hover:border-[#2dd4bf]/30 transition-all"
-              style={{ backgroundColor: "#161b22" }}>
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
-                style={{ background: "linear-gradient(135deg, #2dd4bf20, #0891b220)" }}>
-                <p.icon className="w-6 h-6" style={{ color: "#2dd4bf" }} />
+            <div key={p.title}
+              className="glass-card p-6 rounded-2xl h-full transition-all group hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform group-hover:scale-110"
+                style={{ background: "linear-gradient(135deg, rgba(1,105,111,0.10), rgba(139,92,246,0.08))" }}>
+                <p.icon className="w-6 h-6" style={{ color: "#01696f" }} />
               </div>
-              <h3 className="text-lg font-bold text-white mb-3">{p.title}</h3>
-              <p className="text-sm leading-relaxed" style={{ color: "#8b949e" }}>{p.desc}</p>
+              <h3 className="text-lg font-black mb-3" style={{ color: "#1c1917" }}>{p.title}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: "#6b6560" }}>{p.desc}</p>
             </div>
           ))}
         </div>
 
         {/* Standards */}
-        <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
-          <div className="px-6 py-4 border-b border-white/8" style={{ backgroundColor: "#1c2333" }}>
-            <h2 className="text-lg font-bold text-white">Our Quality Standards</h2>
+        <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="px-6 py-4" style={{ borderBottom: "1px solid rgba(28,25,23,0.06)" }}>
+            <h2 className="text-lg font-black" style={{ color: "#1c1917" }}>Our Quality Standards</h2>
           </div>
-          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4" style={{ backgroundColor: "#161b22" }}>
+          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
               "High-purity peptide compounds with documented purity specifications",
               "Lot-specific documentation available to qualified customers",
@@ -66,8 +70,8 @@ export default function QualityPage() {
               "Consistent formulation across batches for reproducible research",
               "All materials must be used per institutional protocols and GLP",
             ].map((item) => (
-              <div key={item} className="flex items-start gap-3 text-sm" style={{ color: "#c9d1d9" }}>
-                <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" style={{ color: "#2dd4bf" }} />
+              <div key={item} className="flex items-start gap-3 text-sm" style={{ color: "#3d3833" }}>
+                <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" style={{ color: "#01696f" }} />
                 {item}
               </div>
             ))}
@@ -75,17 +79,18 @@ export default function QualityPage() {
         </div>
 
         {/* Research compliance */}
-        <div className="p-8 rounded-2xl" style={{ background: "linear-gradient(135deg, #1c2333, #161b22)", border: "1px solid #2dd4bf20" }}>
+        <div className="p-8 rounded-2xl"
+          style={{ background: "linear-gradient(135deg, rgba(1,105,111,0.06), rgba(139,92,246,0.04))", border: "1px solid rgba(1,105,111,0.14)" }}>
           <div className="flex items-start gap-4">
-            <FlaskConical className="w-8 h-8 shrink-0" style={{ color: "#2dd4bf" }} />
+            <FlaskConical className="w-8 h-8 shrink-0" style={{ color: "#01696f" }} />
             <div>
-              <h2 className="text-xl font-bold text-white mb-3">Compliance & Research Use</h2>
-              <p className="text-base leading-relaxed mb-3" style={{ color: "#8b949e" }}>
+              <h2 className="text-xl font-black mb-3" style={{ color: "#1c1917" }}>Compliance & Research Use</h2>
+              <p className="text-base leading-relaxed mb-3" style={{ color: "#6b6560" }}>
                 All materials must be used in accordance with institutional protocols, local regulations, and good
                 laboratory practices. Gills Bio Lab supplies research chemicals exclusively to qualified researchers
                 and institutions.
               </p>
-              <p className="text-base leading-relaxed" style={{ color: "#8b949e" }}>
+              <p className="text-base leading-relaxed" style={{ color: "#6b6560" }}>
                 Products are not approved for diagnostic, therapeutic, cosmetic, or veterinary applications.
                 Buyers are responsible for ensuring all use complies with applicable laws and institutional guidelines.
               </p>
@@ -94,24 +99,24 @@ export default function QualityPage() {
         </div>
 
         {/* Request documentation */}
-        <div className="text-center p-8 rounded-2xl" style={{ backgroundColor: "#161b22", border: "1px solid rgba(255,255,255,0.08)" }}>
-          <h2 className="text-xl font-bold text-white mb-3">Request Documentation</h2>
-          <p className="text-base mb-6 max-w-lg mx-auto" style={{ color: "#8b949e" }}>
+        <div className="text-center glass-card p-8 rounded-2xl">
+          <h2 className="text-xl font-black mb-3" style={{ color: "#1c1917" }}>Request Documentation</h2>
+          <p className="text-base mb-6 max-w-lg mx-auto leading-relaxed" style={{ color: "#6b6560" }}>
             Qualified customers may request lot-specific documentation for their research records. Contact us with your order details.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all hover:scale-105"
-              style={{ background: "linear-gradient(135deg, #2dd4bf, #0891b2)", color: "#0d1117" }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all hover:scale-105"
+              style={{ background: "linear-gradient(135deg, #01696f, #018a92)", color: "#ffffff", boxShadow: "0 4px 20px rgba(1,105,111,0.25)" }}
             >
               Contact Us
               <ChevronRight className="w-4 h-4" />
             </Link>
             <Link
               href="/catalog"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium transition-all hover:bg-white/5"
-              style={{ border: "1px solid rgba(255,255,255,0.12)", color: "#c9d1d9" }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all hover:bg-black/5"
+              style={{ border: "1px solid rgba(28,25,23,0.12)", color: "#3d3833" }}
             >
               Browse Catalog
             </Link>

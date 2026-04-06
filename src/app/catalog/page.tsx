@@ -49,31 +49,41 @@ export default function CatalogPage() {
   ].filter(Boolean).length;
 
   return (
-    <div style={{ backgroundColor: "#0d1117", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "var(--bg-base)", minHeight: "100vh" }}>
       {/* Header */}
-      <div style={{ backgroundColor: "#161b22", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#2dd4bf" }}>
+      <div style={{
+        background: "linear-gradient(160deg, #f0ede8 0%, #ede9f5 100%)",
+        borderBottom: "1px solid rgba(28,25,23,0.08)",
+      }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "#01696f" }}>
             Research Catalog
           </span>
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mt-2 mb-3">
+          <h1 className="text-3xl sm:text-4xl font-black mt-2 mb-3"
+            style={{ color: "#1c1917", letterSpacing: "-0.02em" }}>
             Peptide Research Catalog
           </h1>
-          <p className="text-base max-w-2xl" style={{ color: "#8b949e" }}>
+          <p className="text-base max-w-2xl leading-relaxed" style={{ color: "#6b6560" }}>
             Explore our current lineup of peptide research chemicals, organized for quick navigation and fast ordering.
             All products are intended strictly for in vitro and laboratory research only.
           </p>
           <div className="flex flex-wrap gap-3 mt-6">
-            <a
-              href="/catalog-pdf"
-              target="_blank"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:scale-105"
-              style={{ background: "linear-gradient(135deg, #2dd4bf, #0891b2)", color: "#0d1117" }}
-            >
+            <a href="/price-list.pdf"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all hover:scale-105"
+              style={{
+                background: "linear-gradient(135deg, #01696f, #018a92)",
+                color: "#ffffff",
+                boxShadow: "0 4px 16px rgba(1,105,111,0.25)",
+              }}>
               <Download className="w-4 h-4" />
-              Download Full Price List
+              Download Price List
             </a>
-            <span className="px-3 py-2 rounded-lg text-sm" style={{ color: "#8b949e", backgroundColor: "#1c2333" }}>
+            <span className="px-3 py-2 rounded-lg text-sm font-medium"
+              style={{
+                backgroundColor: "rgba(255,255,255,0.72)",
+                border: "1px solid rgba(28,25,23,0.10)",
+                color: "#6b6560",
+              }}>
               {products.length} compounds available
             </span>
           </div>
@@ -84,7 +94,7 @@ export default function CatalogPage() {
         {/* Search + Filter toggle */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#8b949e" }} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#9c9590" }} />
             <input
               type="text"
               placeholder="Search by name or code..."
@@ -92,31 +102,31 @@ export default function CatalogPage() {
               onChange={e => { setSearch(e.target.value); setPage(1); }}
               className="w-full pl-10 pr-4 py-3 rounded-xl text-sm outline-none transition-all"
               style={{
-                backgroundColor: "#161b22",
-                border: "1px solid rgba(255,255,255,0.1)",
-                color: "#e8edf2",
+                backgroundColor: "rgba(255,255,255,0.85)",
+                border: "1px solid rgba(28,25,23,0.12)",
+                color: "#1c1917",
               }}
             />
             {search && (
               <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2">
-                <X className="w-4 h-4" style={{ color: "#8b949e" }} />
+                <X className="w-4 h-4" style={{ color: "#9c9590" }} />
               </button>
             )}
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all"
+            className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all"
             style={{
-              backgroundColor: showFilters ? "#2dd4bf20" : "#161b22",
-              border: `1px solid ${showFilters ? "#2dd4bf50" : "rgba(255,255,255,0.1)"}`,
-              color: showFilters ? "#2dd4bf" : "#c9d1d9",
+              backgroundColor: showFilters ? "rgba(1,105,111,0.08)" : "rgba(255,255,255,0.85)",
+              border: `1px solid ${showFilters ? "rgba(1,105,111,0.30)" : "rgba(28,25,23,0.12)"}`,
+              color: showFilters ? "#01696f" : "#3d3833",
             }}
           >
             <SlidersHorizontal className="w-4 h-4" />
             Filters
             {activeFilterCount > 0 && (
-              <span className="w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center"
-                style={{ backgroundColor: "#2dd4bf", color: "#0d1117" }}>
+              <span className="w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center text-white"
+                style={{ backgroundColor: "#01696f" }}>
                 {activeFilterCount}
               </span>
             )}
@@ -124,21 +134,20 @@ export default function CatalogPage() {
           {activeFilterCount > 0 && (
             <button
               onClick={clearFilters}
-              className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm transition-all hover:text-white"
-              style={{ color: "#8b949e" }}
+              className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all"
+              style={{ color: "#9c9590" }}
             >
               <X className="w-4 h-4" />
-              Clear
+              Clear all
             </button>
           )}
         </div>
 
         {/* Filter panel */}
         {showFilters && (
-          <div className="mb-6 p-5 rounded-xl border border-white/8 grid grid-cols-1 sm:grid-cols-3 gap-6"
-            style={{ backgroundColor: "#161b22" }}>
+          <div className="glass-card mb-6 p-5 rounded-2xl grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div>
-              <label className="text-xs font-semibold uppercase tracking-wider mb-3 block" style={{ color: "#8b949e" }}>
+              <label className="text-xs font-bold uppercase tracking-widest mb-3 block" style={{ color: "#9c9590" }}>
                 Category
               </label>
               <div className="flex flex-wrap gap-2">
@@ -148,9 +157,9 @@ export default function CatalogPage() {
                     onClick={() => { setCategory(c); setPage(1); }}
                     className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                     style={{
-                      backgroundColor: category === c ? "#2dd4bf20" : "#1c2333",
-                      border: `1px solid ${category === c ? "#2dd4bf50" : "rgba(255,255,255,0.08)"}`,
-                      color: category === c ? "#2dd4bf" : "#8b949e",
+                      backgroundColor: category === c ? "rgba(1,105,111,0.10)" : "rgba(28,25,23,0.04)",
+                      border: `1px solid ${category === c ? "rgba(1,105,111,0.30)" : "rgba(28,25,23,0.10)"}`,
+                      color: category === c ? "#01696f" : "#6b6560",
                     }}
                   >
                     {c}
@@ -159,7 +168,7 @@ export default function CatalogPage() {
               </div>
             </div>
             <div>
-              <label className="text-xs font-semibold uppercase tracking-wider mb-3 block" style={{ color: "#8b949e" }}>
+              <label className="text-xs font-bold uppercase tracking-widest mb-3 block" style={{ color: "#9c9590" }}>
                 Form
               </label>
               <div className="flex flex-wrap gap-2">
@@ -169,9 +178,9 @@ export default function CatalogPage() {
                     onClick={() => { setForm(f); setPage(1); }}
                     className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                     style={{
-                      backgroundColor: form === f ? "#2dd4bf20" : "#1c2333",
-                      border: `1px solid ${form === f ? "#2dd4bf50" : "rgba(255,255,255,0.08)"}`,
-                      color: form === f ? "#2dd4bf" : "#8b949e",
+                      backgroundColor: form === f ? "rgba(1,105,111,0.10)" : "rgba(28,25,23,0.04)",
+                      border: `1px solid ${form === f ? "rgba(1,105,111,0.30)" : "rgba(28,25,23,0.10)"}`,
+                      color: form === f ? "#01696f" : "#6b6560",
                     }}
                   >
                     {f}
@@ -180,7 +189,7 @@ export default function CatalogPage() {
               </div>
             </div>
             <div>
-              <label className="text-xs font-semibold uppercase tracking-wider mb-3 block" style={{ color: "#8b949e" }}>
+              <label className="text-xs font-bold uppercase tracking-widest mb-3 block" style={{ color: "#9c9590" }}>
                 Availability
               </label>
               <div className="flex flex-wrap gap-2">
@@ -190,9 +199,9 @@ export default function CatalogPage() {
                     onClick={() => { setStock(s); setPage(1); }}
                     className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                     style={{
-                      backgroundColor: stock === s ? "#2dd4bf20" : "#1c2333",
-                      border: `1px solid ${stock === s ? "#2dd4bf50" : "rgba(255,255,255,0.08)"}`,
-                      color: stock === s ? "#2dd4bf" : "#8b949e",
+                      backgroundColor: stock === s ? "rgba(1,105,111,0.10)" : "rgba(28,25,23,0.04)",
+                      border: `1px solid ${stock === s ? "rgba(1,105,111,0.30)" : "rgba(28,25,23,0.10)"}`,
+                      color: stock === s ? "#01696f" : "#6b6560",
                     }}
                   >
                     {s}
@@ -208,14 +217,14 @@ export default function CatalogPage() {
           <div className="flex flex-wrap gap-2 mb-6">
             {search && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs"
-                style={{ backgroundColor: "#2dd4bf15", color: "#2dd4bf", border: "1px solid #2dd4bf30" }}>
+                style={{ backgroundColor: "rgba(1,105,111,0.08)", color: "#01696f", border: "1px solid rgba(1,105,111,0.22)" }}>
                 Search: {search}
                 <button onClick={() => setSearch("")}><X className="w-3 h-3" /></button>
               </span>
             )}
             {category !== "All" && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs"
-                style={{ backgroundColor: "#2dd4bf15", color: "#2dd4bf", border: "1px solid #2dd4bf30" }}>
+                style={{ backgroundColor: "rgba(139,92,246,0.08)", color: "#7c3aed", border: "1px solid rgba(139,92,246,0.20)" }}>
                 {category}
                 <button onClick={() => setCategory("All")}><X className="w-3 h-3" /></button>
               </span>
@@ -225,25 +234,28 @@ export default function CatalogPage() {
 
         {/* Results count */}
         <div className="flex items-center justify-between mb-6">
-          <p className="text-sm" style={{ color: "#8b949e" }}>
+          <p className="text-sm" style={{ color: "#9c9590" }}>
             Showing{" "}
-            <span className="text-white font-medium">{paged.length}</span>
+            <span className="font-semibold" style={{ color: "#1c1917" }}>{paged.length}</span>
             {" "}of{" "}
-            <span className="text-white font-medium">{filtered.length}</span>
+            <span className="font-semibold" style={{ color: "#1c1917" }}>{filtered.length}</span>
             {" "}compounds
           </p>
-          <p className="text-xs" style={{ color: "#f85149" }}>All products: Research Use Only</p>
+          <p className="text-xs font-semibold px-2 py-1 rounded-full"
+            style={{ backgroundColor: "rgba(220,38,38,0.06)", color: "#b91c1c", border: "1px solid rgba(220,38,38,0.14)" }}>
+            Research Use Only
+          </p>
         </div>
 
         {/* Grid */}
         {filtered.length === 0 ? (
           <div className="text-center py-20">
-            <FlaskConicalIcon />
-            <p className="text-lg font-medium text-white mt-4 mb-2">No compounds found</p>
-            <p className="text-sm mb-6" style={{ color: "#8b949e" }}>Try adjusting your search or filters.</p>
+            <FlaskIcon />
+            <p className="text-lg font-black mt-4 mb-2" style={{ color: "#1c1917" }}>No compounds found</p>
+            <p className="text-sm mb-6" style={{ color: "#9c9590" }}>Try adjusting your search or filters.</p>
             <button onClick={clearFilters}
-              className="px-5 py-2.5 rounded-xl text-sm font-medium transition-all hover:scale-105"
-              style={{ background: "linear-gradient(135deg, #2dd4bf, #0891b2)", color: "#0d1117" }}>
+              className="px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-105"
+              style={{ background: "linear-gradient(135deg, #01696f, #018a92)", color: "#ffffff" }}>
               Clear Filters
             </button>
           </div>
@@ -259,8 +271,12 @@ export default function CatalogPage() {
               <div className="mt-10 text-center">
                 <button
                   onClick={() => setPage(p => p + 1)}
-                  className="px-8 py-3 rounded-xl text-sm font-semibold transition-all hover:scale-105"
-                  style={{ border: "1px solid #2dd4bf40", color: "#2dd4bf" }}
+                  className="px-8 py-3 rounded-xl text-sm font-bold transition-all hover:scale-105"
+                  style={{
+                    border: "1px solid rgba(1,105,111,0.25)",
+                    color: "#01696f",
+                    backgroundColor: "rgba(1,105,111,0.05)",
+                  }}
                 >
                   Load More ({filtered.length - paged.length} remaining)
                 </button>
@@ -270,21 +286,22 @@ export default function CatalogPage() {
         )}
 
         {/* Disclaimer */}
-        <div className="mt-16 p-6 rounded-xl text-sm text-center"
-          style={{ backgroundColor: "#f8514908", border: "1px solid #f8514920", color: "#8b949e" }}>
+        <div className="mt-16 p-6 rounded-2xl text-sm text-center"
+          style={{ backgroundColor: "rgba(220,38,38,0.03)", border: "1px solid rgba(220,38,38,0.10)", color: "#6b6560" }}>
           All peptide products listed are intended strictly for in vitro and laboratory research.
-          They are <strong className="text-white">not for human consumption, medical treatment, or veterinary use.</strong>
+          They are{" "}
+          <strong style={{ color: "#1c1917" }}>not for human consumption, medical treatment, or veterinary use.</strong>
         </div>
       </div>
     </div>
   );
 }
 
-function FlaskConicalIcon() {
+function FlaskIcon() {
   return (
     <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
-      style={{ backgroundColor: "#2dd4bf15" }}>
-      <svg className="w-8 h-8" style={{ color: "#2dd4bf" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      style={{ backgroundColor: "rgba(1,105,111,0.08)" }}>
+      <svg className="w-8 h-8" style={{ color: "#01696f" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
           d="M9 3h6m-6 0v6l-4 10a1 1 0 001 1.5h12a1 1 0 001-1.5L15 9V3M9 3H7m8 0h2" />
       </svg>

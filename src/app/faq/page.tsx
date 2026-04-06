@@ -58,17 +58,21 @@ export default function FAQPage() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <div style={{ backgroundColor: "#0d1117", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "var(--bg-base)", minHeight: "100vh" }}>
       {/* Header */}
-      <div style={{ background: "linear-gradient(135deg, #161b22, #0d1117)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#2dd4bf" }}>
+      <div style={{
+        background: "linear-gradient(160deg, #f0ede8 0%, #ede9f5 100%)",
+        borderBottom: "1px solid rgba(28,25,23,0.08)",
+      }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 text-center">
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "#8b5cf6" }}>
             FAQ
           </span>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white mt-2 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-black mt-2 mb-4"
+            style={{ color: "#1c1917", letterSpacing: "-0.03em" }}>
             Frequently Asked Questions
           </h1>
-          <p className="text-lg max-w-2xl mx-auto" style={{ color: "#8b949e" }}>
+          <p className="text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: "#6b6560" }}>
             Answers to common questions about ordering, research use compliance, shipping, and documentation.
           </p>
         </div>
@@ -79,26 +83,30 @@ export default function FAQPage() {
           {faqs.map((faq, i) => (
             <div
               key={i}
-              className="rounded-xl overflow-hidden border transition-all"
+              className="glass-card rounded-2xl overflow-hidden transition-all"
               style={{
-                backgroundColor: "#161b22",
-                borderColor: open === i ? "#2dd4bf40" : "rgba(255,255,255,0.08)",
+                borderColor: open === i ? "rgba(1,105,111,0.25)" : undefined,
               }}
             >
               <button
                 className="w-full flex items-center justify-between px-6 py-4 text-left"
                 onClick={() => setOpen(open === i ? null : i)}
               >
-                <span className="font-medium text-sm pr-4" style={{ color: open === i ? "#2dd4bf" : "#e8edf2" }}>
+                <span className="font-semibold text-sm pr-4"
+                  style={{ color: open === i ? "#01696f" : "#1c1917" }}>
                   {faq.q}
                 </span>
                 {open === i
-                  ? <ChevronUp className="w-4 h-4 shrink-0" style={{ color: "#2dd4bf" }} />
-                  : <ChevronDown className="w-4 h-4 shrink-0" style={{ color: "#8b949e" }} />}
+                  ? <ChevronUp className="w-4 h-4 shrink-0" style={{ color: "#01696f" }} />
+                  : <ChevronDown className="w-4 h-4 shrink-0" style={{ color: "#9c9590" }} />}
               </button>
               {open === i && (
-                <div className="px-6 pb-5 text-sm leading-relaxed border-t border-white/5"
-                  style={{ color: "#8b949e", paddingTop: "1rem" }}>
+                <div className="px-6 pb-5 text-sm leading-relaxed"
+                  style={{
+                    color: "#6b6560",
+                    paddingTop: "1rem",
+                    borderTop: "1px solid rgba(28,25,23,0.06)",
+                  }}>
                   {faq.a}
                 </div>
               )}
@@ -107,24 +115,24 @@ export default function FAQPage() {
         </div>
 
         {/* Compliance note */}
-        <div className="mt-12 p-6 rounded-xl text-sm"
-          style={{ backgroundColor: "#f8514908", border: "1px solid #f8514920", color: "#8b949e" }}>
-          <strong className="text-white">Research Use Policy: </strong>
+        <div className="mt-12 p-6 rounded-2xl text-sm leading-relaxed"
+          style={{ backgroundColor: "rgba(220,38,38,0.04)", border: "1px solid rgba(220,38,38,0.10)", color: "#6b6560" }}>
+          <strong style={{ color: "#1c1917" }}>Research Use Policy: </strong>
           Gills Bio Lab supplies peptide research chemicals exclusively for laboratory use by qualified professionals.
           Products are not intended for human or veterinary consumption. By placing an order, you agree to all applicable
           laws, regulations, and institutional guidelines.
         </div>
 
         {/* More questions */}
-        <div className="mt-8 text-center p-6 rounded-xl" style={{ backgroundColor: "#161b22", border: "1px solid rgba(255,255,255,0.08)" }}>
-          <p className="text-base font-medium text-white mb-2">Have another question?</p>
-          <p className="text-sm mb-5" style={{ color: "#8b949e" }}>
+        <div className="mt-8 text-center glass-card p-6 rounded-2xl">
+          <p className="text-base font-black mb-2" style={{ color: "#1c1917" }}>Have another question?</p>
+          <p className="text-sm mb-5 leading-relaxed" style={{ color: "#9c9590" }}>
             Our team is available to assist qualified researchers with ordering, documentation, and availability questions.
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all hover:scale-105"
-            style={{ background: "linear-gradient(135deg, #2dd4bf, #0891b2)", color: "#0d1117" }}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all hover:scale-105"
+            style={{ background: "linear-gradient(135deg, #01696f, #018a92)", color: "#ffffff", boxShadow: "0 4px 20px rgba(1,105,111,0.25)" }}
           >
             Contact Us
           </Link>

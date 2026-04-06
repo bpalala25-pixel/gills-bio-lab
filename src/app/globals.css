@@ -46,119 +46,127 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
+/* ─── DESIGN TOKENS ─────────────────────────────────────────────────────── */
 :root {
-  --radius: 0.5rem;
-  --background: #0d1117;
-  --foreground: #e8edf2;
-  --card: #161b22;
-  --card-foreground: #e8edf2;
-  --popover: #161b22;
-  --popover-foreground: #e8edf2;
-  --primary: #2dd4bf;
-  --primary-foreground: #0d1117;
-  --secondary: #1c2333;
-  --secondary-foreground: #c9d1d9;
-  --muted: #1c2333;
-  --muted-foreground: #8b949e;
-  --accent: #2dd4bf;
-  --accent-foreground: #0d1117;
-  --destructive: #f85149;
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.10);
-  --ring: #2dd4bf;
-  --chart-1: #2dd4bf;
-  --chart-2: #06b6d4;
-  --chart-3: #0891b2;
-  --chart-4: #67e8f9;
-  --chart-5: #a5f3fc;
-  --sidebar: #161b22;
-  --sidebar-foreground: #e8edf2;
-  --sidebar-primary: #2dd4bf;
-  --sidebar-primary-foreground: #0d1117;
-  --sidebar-accent: #1c2333;
-  --sidebar-accent-foreground: #e8edf2;
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-ring: #2dd4bf;
+  --radius: 0.625rem;
+
+  /* Pearl / ivory base */
+  --bg-base:      #f7f5f2;
+  --bg-surface:   #faf9f7;
+  --bg-elevated:  #ffffff;
+  --bg-sunken:    #f0ede8;
+
+  /* Deep teal – clinical authority */
+  --teal:         #01696f;
+  --teal-light:   #018a92;
+  --teal-muted:   #e8f4f4;
+  --teal-dim:     rgba(1,105,111,0.12);
+
+  /* Orchid / biotech lavender – premium accent */
+  --orchid:       #8b5cf6;
+  --orchid-light: #a78bfa;
+  --orchid-muted: #f3f0ff;
+  --orchid-dim:   rgba(139,92,246,0.10);
+
+  /* Graphite type */
+  --ink:          #1c1917;
+  --ink-2:        #3d3833;
+  --ink-3:        #6b6560;
+  --ink-4:        #9c9590;
+
+  /* Borders */
+  --border-soft:  rgba(28,25,23,0.08);
+  --border-mid:   rgba(28,25,23,0.14);
+  --silver:       rgba(180,175,170,0.35);
+
+  /* Semantic aliases */
+  --background:           var(--bg-base);
+  --foreground:           var(--ink);
+  --card:                 var(--bg-elevated);
+  --card-foreground:      var(--ink);
+  --popover:              var(--bg-elevated);
+  --popover-foreground:   var(--ink);
+  --primary:              var(--teal);
+  --primary-foreground:   #ffffff;
+  --secondary:            var(--bg-sunken);
+  --secondary-foreground: var(--ink-2);
+  --muted:                var(--bg-sunken);
+  --muted-foreground:     var(--ink-3);
+  --accent:               var(--orchid);
+  --accent-foreground:    #ffffff;
+  --destructive:          #dc2626;
+  --border:               var(--border-soft);
+  --input:                var(--border-soft);
+  --ring:                 var(--teal);
+  --chart-1:              var(--teal);
+  --chart-2:              var(--orchid);
+  --chart-3:              #f59e0b;
+  --chart-4:              #10b981;
+  --chart-5:              #3b82f6;
+  --sidebar:              var(--bg-elevated);
+  --sidebar-foreground:   var(--ink);
+  --sidebar-primary:      var(--teal);
+  --sidebar-primary-foreground: #fff;
+  --sidebar-accent:       var(--bg-sunken);
+  --sidebar-accent-foreground: var(--ink-2);
+  --sidebar-border:       var(--border-soft);
+  --sidebar-ring:         var(--teal);
 }
 
+/* ─── BASE ──────────────────────────────────────────────────────────────── */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
+  * { @apply border-border outline-ring/50; }
   body {
-    @apply bg-background text-foreground antialiased;
-    background-color: #0d1117;
-    color: #e8edf2;
+    background-color: var(--bg-base);
+    color: var(--ink);
+    font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-smoothing: antialiased;
   }
-  html {
-    scroll-behavior: smooth;
-  }
+  html { scroll-behavior: smooth; }
 }
 
-/* Animations */
+/* ─── ANIMATIONS ────────────────────────────────────────────────────────── */
 @keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes fade-in {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
-
-@keyframes slide-in-left {
-  from { opacity: 0; transform: translateX(-30px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 10px rgba(45, 212, 191, 0.3); }
-  50% { box-shadow: 0 0 25px rgba(45, 212, 191, 0.6), 0 0 50px rgba(45, 212, 191, 0.2); }
-}
-
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-10px); }
 }
-
-@keyframes cart-fly {
-  0% { opacity: 1; transform: scale(1) translate(0, 0); }
-  100% { opacity: 0; transform: scale(0.2) translate(300px, -300px); }
-}
-
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes holo-shift {
+  0%,100% { background-position: 0% 50%; }
+  50%     { background-position: 100% 50%; }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 0.7s ease-out forwards;
-  opacity: 0;
+/* Retatrutide 3-D exhibit */
+@keyframes ret-glow-pulse {
+  0%,100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
+  50%     { opacity: 0.9; transform: translate(-50%,-50%) scale(1.08); }
 }
-
-.animate-fade-in {
-  animation: fade-in 0.6s ease-out forwards;
-  opacity: 0;
+@keyframes ret-beam {
+  0%,100% { opacity: 0.09; }
+  50%     { opacity: 0.22; }
 }
-
-.animate-slide-in-left {
-  animation: slide-in-left 0.7s ease-out forwards;
-  opacity: 0;
+@keyframes ret-orbit {
+  0%   { transform: rotate(0deg)   translateX(var(--r)) rotate(0deg);   }
+  100% { transform: rotate(360deg) translateX(var(--r)) rotate(-360deg); }
 }
+.ret-glow { animation: ret-glow-pulse 3.5s ease-in-out infinite; }
+.ret-beam { animation: ret-beam       4s   ease-in-out infinite; }
 
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
+.animate-fade-in-up  { animation: fade-in-up 0.7s ease-out forwards; opacity: 0; }
+.animate-fade-in     { animation: fade-in    0.6s ease-out forwards; opacity: 0; }
+.animate-float       { animation: float 6s ease-in-out infinite; }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.cart-fly-anim {
-  animation: cart-fly 0.5s ease-in forwards;
-}
-
-/* Delay utilities */
 .delay-100 { animation-delay: 0.1s; }
 .delay-200 { animation-delay: 0.2s; }
 .delay-300 { animation-delay: 0.3s; }
@@ -168,10 +176,10 @@
 .delay-700 { animation-delay: 0.7s; }
 .delay-800 { animation-delay: 0.8s; }
 
-/* Scroll reveal */
+/* ─── SCROLL REVEAL ─────────────────────────────────────────────────────── */
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
+  transform: translateY(20px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .reveal.visible {
@@ -179,60 +187,29 @@
   transform: translateY(0);
 }
 
-/* Retatrutide 3D vial animations */
-@keyframes vial-float {
-  0%, 100% { transform: perspective(900px) rotateY(-18deg) rotateX(4deg) translateY(0px); }
-  50%       { transform: perspective(900px) rotateY(-18deg) rotateX(4deg) translateY(-16px); }
+/* ─── FROSTED GLASS CARD ────────────────────────────────────────────────── */
+.glass-card {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.85);
+  box-shadow: 0 2px 24px rgba(28,25,23,0.06), 0 0 0 1px rgba(180,175,170,0.18);
 }
-@keyframes vial-float-back {
-  0%, 100% { transform: perspective(900px) rotateY(-28deg) rotateX(6deg) translateY(-8px) scale(0.88); }
-  50%       { transform: perspective(900px) rotateY(-28deg) rotateX(6deg) translateY(-24px) scale(0.88); }
+.glass-card:hover {
+  background: rgba(255,255,255,0.88);
+  box-shadow: 0 8px 40px rgba(1,105,111,0.10), 0 0 0 1px rgba(1,105,111,0.18);
 }
-@keyframes beam-sweep {
-  0%, 100% { opacity: 0.4; transform: translateX(-10px) scaleX(1); }
-  50%       { opacity: 0.7; transform: translateX(10px) scaleX(1.1); }
-}
-@keyframes orbit-1 {
-  0%   { transform: rotate(0deg)   translateX(160px) rotate(0deg);   }
-  100% { transform: rotate(360deg) translateX(160px) rotate(-360deg); }
-}
-@keyframes orbit-2 {
-  0%   { transform: rotate(120deg) translateX(140px) rotate(-120deg); }
-  100% { transform: rotate(480deg) translateX(140px) rotate(-480deg); }
-}
-@keyframes orbit-3 {
-  0%   { transform: rotate(240deg) translateX(175px) rotate(-240deg); }
-  100% { transform: rotate(600deg) translateX(175px) rotate(-600deg); }
-}
-@keyframes holo-shift {
-  0%   { background-position: 0%   50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0%   50%; }
-}
-.vial-3d-front { animation: vial-float 5s ease-in-out infinite; }
-.vial-3d-back  { animation: vial-float-back 5s ease-in-out infinite; animation-delay: -1.5s; }
-.beam-anim     { animation: beam-sweep 4s ease-in-out infinite; }
 
-/* Teal glow effects */
+/* ─── TEAL GLOW ─────────────────────────────────────────────────────────── */
 .glow-teal {
-  box-shadow: 0 0 20px rgba(45, 212, 191, 0.3), 0 0 40px rgba(45, 212, 191, 0.1);
+  box-shadow: 0 0 24px rgba(1,105,111,0.22), 0 0 48px rgba(1,105,111,0.08);
 }
 
-.glow-teal-sm {
-  box-shadow: 0 0 10px rgba(45, 212, 191, 0.2);
-}
+/* ─── SCROLLBAR ─────────────────────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 5px; }
+::-webkit-scrollbar-track  { background: var(--bg-base); }
+::-webkit-scrollbar-thumb  { background: rgba(1,105,111,0.25); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(1,105,111,0.45); }
 
-.text-glow-teal {
-  text-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0d1117; }
-::-webkit-scrollbar-thumb { background: #2d3748; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(45, 212, 191, 0.5); }
-
-/* Hide Next.js dev indicator portal */
-nextjs-portal {
-  display: none !important;
-}
+/* Hide Next.js dev indicator */
+nextjs-portal { display: none !important; }
