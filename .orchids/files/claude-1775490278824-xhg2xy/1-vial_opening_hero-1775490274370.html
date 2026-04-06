@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vial-opening-hero</title>
+<style>
+html,body{margin:0;height:100%;background:radial-gradient(circle at 50% 20%,#f7f4fb 0%,#f1eef7 35%,#ebe8f2 100%);overflow:hidden}
+body{font-family:Arial,sans-serif}
+canvas{display:block;width:100vw;height:100vh}
+.ui{position:fixed;left:20px;bottom:20px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.75);backdrop-filter:blur(10px);font-size:14px;color:#333;border:1px solid rgba(0,0,0,.08)}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="ui">Drag to rotate · Scroll to zoom</div>
+<script type="module">
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, innerWidth/innerHeight, 0.1, 100);
+camera.position.set(0, 0.5, 6);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.enablePan = false;
+controls.minDistance = 3.5;
+controls.maxDistance = 8;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 1.1;
+
+const group = new THREE.Group();
+scene.add(group);
+
+const glassMat = new THREE.MeshPhysicalMaterial({
+  color: 0xffffff, transparent: true, opacity: 0.22, roughness: 0.08, transmission: 0.95, thickness: 0.9, ior: 1.45, clearcoat: 1, clearcoatRoughness: 0.06
+});
+const silverMat = new THREE.MeshStandardMaterial({color:0xc7c7cc, metalness:0.92, roughness:0.28});
+const purpleMat = new THREE.MeshStandardMaterial({color:0xb56ad8, metalness:0.12, roughness:0.72});
+const labelMat = new THREE.MeshStandardMaterial({color:0xf7f7fb, metalness:0.08, roughness:0.55});
+const inkMat = new THREE.MeshStandardMaterial({color:0x181818, metalness:0.0, roughness:0.9});
+
+const body = new THREE.Mesh(new THREE.CylinderGeometry(0.92,0.82,2.9,96), glassMat);
+body.position.y = -0.1; group.add(body);
+const shoulder = new THREE.Mesh(new THREE.CylinderGeometry(0.82,0.52,0.55,96), glassMat);
+shoulder.position.y = 1.55; group.add(shoulder);
+const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.46,0.46,0.55,96), glassMat);
+neck.position.y = 2.05; group.add(neck);
+const rim = new THREE.Mesh(new THREE.TorusGeometry(0.82,0.045,24,120), glassMat);
+rim.rotation.x = Math.PI/2; rim.position.y = 1.1; group.add(rim);
+const base = new THREE.Mesh(new THREE.CylinderGeometry(0.86,0.92,0.18,96), glassMat);
+base.position.y = -1.58; group.add(base);
+
+const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.86,0.86,0.72,96), silverMat);
+collar.position.y = 2.52; group.add(collar);
+const cap = new THREE.Mesh(new THREE.CylinderGeometry(1.02,1.02,0.26,96), purpleMat);
+cap.position.y = 2.95; group.add(cap);
+
+const label = new THREE.Mesh(new THREE.CylinderGeometry(0.925,0.825,1.65,96,1,true), labelMat);
+label.position.y = -0.02; group.add(label);
+
+function addBand(y, h){
+  const band = new THREE.Mesh(new THREE.CylinderGeometry(0.93,0.83,h,96,1,true), inkMat);
+  band.position.y = y; group.add(band); return band;
+}
+addBand(0.52, 0.02);
+addBand(-0.18, 0.012);
+
+function textBlock(w,h,color){
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 1024;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.fillStyle = 'rgba(247,247,251,0.0)'; ctx.fillRect(0,0,c.width,c.height);
+  ctx.fillStyle = '#111';
+  ctx.font = 'bold 108px Arial'; ctx.fillText('RETATRUTIDE', 95, 220);
+  ctx.font = 'bold 88px Arial'; ctx.fillText('30 mg', 95, 330);
+  ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(85, 395); ctx.lineTo(935, 395); ctx.strokeStyle='#111'; ctx.stroke();
+  ctx.font = '64px Arial'; ctx.fillText('Sterile Lyophilized Powder', 115, 520);
+  ctx.font = '60px Arial'; ctx.fillText('• Not for Human Use', 115, 640);
+  ctx.fillText('• Store at 2-8°C', 115, 740);
+  ctx.beginPath(); ctx.ellipse(780, 310, 120, 72, 0, 0, Math.PI*2); ctx.stroke();
+  ctx.font = 'bold 54px Arial'; ctx.fillText('GILLS', 715, 300);
+  ctx.font = '46px Arial'; ctx.fillText('BioLab', 728, 350);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const m = new THREE.MeshBasicMaterial({map:tex, transparent:true});
+  const p = new THREE.Mesh(new THREE.PlaneGeometry(w,h), m);
+  p.position.set(0, 0.02, 0.94);
+  group.add(p);
+}
+textBlock(1.7,1.95);
+
+group.rotation.x = -0.08;
+
+const key = new THREE.DirectionalLight(0xffffff, 2.3); key.position.set(3,4,6); scene.add(key);
+const fill = new THREE.DirectionalLight(0xe9ddff, 1.2); fill.position.set(-4,1,3); scene.add(fill);
+const rimLight = new THREE.DirectionalLight(0xffffff, 1.6); rimLight.position.set(0,3,-4); scene.add(rimLight);
+scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+
+const floor = new THREE.Mesh(new THREE.CircleGeometry(2.25, 64), new THREE.MeshBasicMaterial({color:0xded7e8, transparent:true, opacity:0.35}));
+floor.rotation.x = -Math.PI/2; floor.position.y = -1.7; scene.add(floor);
+
+function resize(){
+  camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+}
+addEventListener('resize', resize);
+
+renderer.setAnimationLoop(() => {
+  controls.update();
+  group.position.y = Math.sin(performance.now()*0.0012) * 0.08;
+  renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>

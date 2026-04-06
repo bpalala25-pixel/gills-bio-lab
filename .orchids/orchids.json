@@ -1,0 +1,7 @@
+{
+  "startupCommands": [
+    "npm install; npm run dev"
+  ],
+  "projectId": "eead236e-f944-4d67-9f49-7b1138c758c3",
+  "templateId": "nextjs"
+}
