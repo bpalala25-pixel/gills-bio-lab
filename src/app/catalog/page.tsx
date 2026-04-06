@@ -51,30 +51,52 @@ export default function CatalogPage() {
   return (
     <div style={{ backgroundColor: "var(--bg-base)", minHeight: "100vh" }}>
       {/* Header */}
-      <div style={{
-        background: "linear-gradient(160deg, #f0ede8 0%, #ede9f5 100%)",
+      <div className="relative overflow-hidden" style={{
+        background: "linear-gradient(160deg, #f0ede8 0%, #ede9f5 60%, #e8f4f4 100%)",
         borderBottom: "1px solid rgba(28,25,23,0.08)",
       }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "#01696f" }}>
+        {/* Decorative orbs */}
+        <div className="absolute top-0 right-0 w-[360px] h-[260px] pointer-events-none"
+          style={{ background: "radial-gradient(circle at 80% 30%, rgba(139,92,246,0.09) 0%, transparent 60%)", filter: "blur(30px)" }} />
+        <div className="absolute bottom-0 left-0 w-[280px] h-[200px] pointer-events-none"
+          style={{ background: "radial-gradient(circle at 20% 80%, rgba(1,105,111,0.09) 0%, transparent 60%)", filter: "blur(24px)" }} />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "#01696f" }}>
+            <span className="w-1 h-1 rounded-full" style={{ backgroundColor: "#01696f" }} />
             Research Catalog
           </span>
           <h1 className="text-3xl sm:text-4xl font-black mt-2 mb-3"
             style={{ color: "#1c1917", letterSpacing: "-0.02em" }}>
-            Peptide Research Catalog
+            Peptide Research{" "}
+            <span style={{
+              background: "linear-gradient(135deg, #01696f, #7c3aed)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}>Catalog</span>
           </h1>
           <p className="text-base max-w-2xl leading-relaxed" style={{ color: "#6b6560" }}>
             Explore our current lineup of peptide research chemicals, organized for quick navigation and fast ordering.
             All products are intended strictly for in vitro and laboratory research only.
           </p>
           <div className="flex flex-wrap gap-3 mt-6">
-            <span className="px-3 py-2 rounded-lg text-sm font-medium"
+            <span className="btn-shimmer px-4 py-2 rounded-xl text-sm font-semibold"
+              style={{
+                background: "linear-gradient(135deg, rgba(1,105,111,0.12), rgba(139,92,246,0.08))",
+                border: "1px solid rgba(1,105,111,0.20)",
+                color: "#01696f",
+              }}>
+              {products.length} compounds available
+            </span>
+            <span className="px-4 py-2 rounded-xl text-sm font-semibold"
               style={{
                 backgroundColor: "rgba(255,255,255,0.72)",
                 border: "1px solid rgba(28,25,23,0.10)",
-                color: "#6b6560",
+                color: "#9c9590",
+                backdropFilter: "blur(8px)",
               }}>
-              {products.length} compounds available
+              ≥ 98% purity · Research Use Only
             </span>
           </div>
         </div>

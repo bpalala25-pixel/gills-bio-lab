@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     q: "How do I view pricing?",
-    a: "You can view pricing directly within the product catalog on each product page. You can also download the full price list for current offerings and quantities from our homepage or footer.",
+    a: "You can view pricing directly within the product catalog on each product page. Prices are listed per vial with tiered options displayed on individual product pages.",
   },
   {
     q: "Do you offer bulk or recurring supply?",
@@ -60,17 +60,30 @@ export default function FAQPage() {
   return (
     <div style={{ backgroundColor: "var(--bg-base)", minHeight: "100vh" }}>
       {/* Header */}
-      <div style={{
-        background: "linear-gradient(160deg, #f0ede8 0%, #ede9f5 100%)",
+      <div className="relative overflow-hidden" style={{
+        background: "linear-gradient(160deg, #f0ede8 0%, #ede9f5 60%, #e8f4f4 100%)",
         borderBottom: "1px solid rgba(28,25,23,0.08)",
       }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 text-center">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "#8b5cf6" }}>
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-[20%] w-[300px] h-[200px]"
+            style={{ background: "radial-gradient(circle, rgba(139,92,246,0.09) 0%, transparent 65%)", filter: "blur(28px)" }} />
+          <div className="absolute bottom-0 left-[10%] w-[250px] h-[150px]"
+            style={{ background: "radial-gradient(circle, rgba(1,105,111,0.07) 0%, transparent 65%)", filter: "blur(22px)" }} />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 text-center">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "#8b5cf6" }}>
+            <span className="w-1 h-1 rounded-full" style={{ backgroundColor: "#8b5cf6" }} />
             FAQ
           </span>
           <h1 className="text-4xl sm:text-5xl font-black mt-2 mb-4"
             style={{ color: "#1c1917", letterSpacing: "-0.03em" }}>
-            Frequently Asked Questions
+            Frequently Asked{" "}
+            <span style={{
+              background: "linear-gradient(135deg, #8b5cf6, #01696f)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}>Questions</span>
           </h1>
           <p className="text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: "#6b6560" }}>
             Answers to common questions about ordering, research use compliance, shipping, and documentation.

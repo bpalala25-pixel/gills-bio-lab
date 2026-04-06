@@ -146,6 +146,37 @@
   0%,100% { background-position: 0% 50%; }
   50%     { background-position: 100% 50%; }
 }
+@keyframes orb-drift-1 {
+  0%,100% { transform: translate(0, 0) scale(1); }
+  33%     { transform: translate(40px, -30px) scale(1.08); }
+  66%     { transform: translate(-20px, 20px) scale(0.96); }
+}
+@keyframes orb-drift-2 {
+  0%,100% { transform: translate(0, 0) scale(1); }
+  40%     { transform: translate(-50px, 25px) scale(1.06); }
+  70%     { transform: translate(30px, -15px) scale(0.94); }
+}
+@keyframes orb-drift-3 {
+  0%,100% { transform: translate(0, 0) scale(1); }
+  50%     { transform: translate(25px, 40px) scale(1.05); }
+}
+@keyframes gradient-x {
+  0%,100% { background-position: 0% 50%; }
+  50%     { background-position: 100% 50%; }
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(1,105,111,0.25); }
+  70%  { transform: scale(1);    box-shadow: 0 0 0 14px rgba(1,105,111,0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(1,105,111,0); }
+}
+@keyframes shimmer-pass {
+  0%   { left: -100%; }
+  100% { left: 200%; }
+}
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 
 /* Retatrutide 3-D exhibit */
 @keyframes ret-glow-pulse {
@@ -166,6 +197,12 @@
 .animate-fade-in-up  { animation: fade-in-up 0.7s ease-out forwards; opacity: 0; }
 .animate-fade-in     { animation: fade-in    0.6s ease-out forwards; opacity: 0; }
 .animate-float       { animation: float 6s ease-in-out infinite; }
+.animate-orb-1       { animation: orb-drift-1 18s ease-in-out infinite; }
+.animate-orb-2       { animation: orb-drift-2 22s ease-in-out infinite; }
+.animate-orb-3       { animation: orb-drift-3 15s ease-in-out infinite; }
+.animate-gradient-x  { animation: gradient-x 6s ease infinite; background-size: 200% 200%; }
+.animate-pulse-ring  { animation: pulse-ring 2.5s ease-in-out infinite; }
+.animate-ticker      { animation: ticker-scroll 28s linear infinite; }
 
 .delay-100 { animation-delay: 0.1s; }
 .delay-200 { animation-delay: 0.2s; }
@@ -189,21 +226,48 @@
 
 /* ─── FROSTED GLASS CARD ────────────────────────────────────────────────── */
 .glass-card {
-  background: rgba(255,255,255,0.72);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  border: 1px solid rgba(255,255,255,0.85);
-  box-shadow: 0 2px 24px rgba(28,25,23,0.06), 0 0 0 1px rgba(180,175,170,0.18);
+  background: rgba(255,255,255,0.74);
+  backdrop-filter: blur(20px) saturate(175%);
+  -webkit-backdrop-filter: blur(20px) saturate(175%);
+  border: 1px solid rgba(255,255,255,0.90);
+  box-shadow: 0 2px 24px rgba(28,25,23,0.07), 0 0 0 1px rgba(180,175,170,0.18), inset 0 1px 0 rgba(255,255,255,0.65);
+  transition: box-shadow 0.25s ease, background 0.25s ease, transform 0.25s ease;
 }
 .glass-card:hover {
-  background: rgba(255,255,255,0.88);
-  box-shadow: 0 8px 40px rgba(1,105,111,0.10), 0 0 0 1px rgba(1,105,111,0.18);
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 12px 48px rgba(1,105,111,0.12), 0 0 0 1px rgba(1,105,111,0.20), inset 0 1px 0 rgba(255,255,255,0.80);
 }
 
 /* ─── TEAL GLOW ─────────────────────────────────────────────────────────── */
 .glow-teal {
   box-shadow: 0 0 24px rgba(1,105,111,0.22), 0 0 48px rgba(1,105,111,0.08);
 }
+
+/* ─── SHIMMER BUTTON ────────────────────────────────────────────────────── */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 50%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  animation: shimmer-pass 2.8s ease-in-out infinite;
+}
+
+/* ─── GRADIENT HEADLINE ─────────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #01696f 0%, #8b5cf6 60%, #018a92 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-x 5s ease infinite;
+}
+
+/* ─── GLASS CARD (enhanced) ─────────────────────────────────────────────── */
 
 /* ─── SCROLLBAR ─────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar        { width: 5px; }

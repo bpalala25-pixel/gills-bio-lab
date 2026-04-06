@@ -26,13 +26,6 @@ function RevealSection({ children, className = "" }: { children: React.ReactNode
   return <div ref={ref} className={`reveal ${className}`}>{children}</div>;
 }
 
-const trustItems = [
-  { label: "≥ 98% Purity", icon: "◈" },
-  { label: "Lab-Grade Quality", icon: "◈" },
-  { label: "Research Use Only", icon: "◈" },
-  { label: "Fast, Discreet Shipping", icon: "◈" },
-];
-
 const benefits = [
   { icon: Award,      title: "Lab-Focused",         desc: "Designed around the needs of research environments — not consumer supplement markets." },
   { icon: ShieldCheck, title: "Consistency",          desc: "Batches produced and stored with a focus on identity, purity, and reproducibility." },
@@ -46,46 +39,45 @@ export default function HomePage() {
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="relative min-h-[92vh] flex items-center overflow-hidden pt-16"
-        style={{
-          background: "linear-gradient(160deg, #f7f5f2 0%, #efeae3 40%, #f3eff8 100%)",
-        }}>
+        style={{ background: "linear-gradient(160deg, #f7f5f2 0%, #efeae3 40%, #f3eff8 100%)" }}>
         <MolecularBg />
 
-        {/* Orchid bloom top-right */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none"
-          style={{ background: "radial-gradient(circle at 80% 20%, rgba(139,92,246,0.07) 0%, transparent 60%)" }} />
-        {/* Teal bloom bottom-left */}
-        <div className="absolute bottom-0 left-0 w-[500px] h-[400px] pointer-events-none"
-          style={{ background: "radial-gradient(circle at 20% 90%, rgba(1,105,111,0.06) 0%, transparent 60%)" }} />
+        {/* Animated ambient orbs */}
+        <div className="absolute top-[8%] right-[12%] w-[520px] h-[520px] rounded-full pointer-events-none animate-orb-1"
+          style={{ background: "radial-gradient(circle, rgba(139,92,246,0.10) 0%, transparent 65%)", filter: "blur(40px)" }} />
+        <div className="absolute bottom-[10%] left-[8%] w-[420px] h-[420px] rounded-full pointer-events-none animate-orb-2"
+          style={{ background: "radial-gradient(circle, rgba(1,105,111,0.10) 0%, transparent 65%)", filter: "blur(36px)" }} />
+        <div className="absolute top-[45%] left-[38%] w-[280px] h-[280px] rounded-full pointer-events-none animate-orb-3"
+          style={{ background: "radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%)", filter: "blur(30px)" }} />
+
+        {/* Top-right corner accent line */}
+        <div className="absolute top-0 right-0 w-px h-48 pointer-events-none"
+          style={{ background: "linear-gradient(to bottom, transparent, rgba(1,105,111,0.25), transparent)" }} />
+        <div className="absolute top-0 right-0 w-48 h-px pointer-events-none"
+          style={{ background: "linear-gradient(to left, transparent, rgba(139,92,246,0.25), transparent)" }} />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 text-center">
 
-          {/* Eyebrow pill */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-8 animate-fade-in"
+          {/* Eyebrow pill — animated pulse ring */}
+          <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full text-xs font-semibold mb-9 animate-fade-in"
             style={{
-              backgroundColor: "rgba(1,105,111,0.08)",
-              border: "1px solid rgba(1,105,111,0.20)",
+              backgroundColor: "rgba(1,105,111,0.07)",
+              border: "1px solid rgba(1,105,111,0.22)",
               color: "#01696f",
+              boxShadow: "0 0 0 4px rgba(1,105,111,0.05)",
             }}>
-            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: "#01696f" }} />
-            Professional Research Chemical Supplier
+            <span className="relative flex w-2 h-2">
+              <span className="absolute inline-flex w-full h-full rounded-full opacity-75 animate-ping"
+                style={{ backgroundColor: "#01696f" }} />
+              <span className="relative inline-flex w-2 h-2 rounded-full" style={{ backgroundColor: "#01696f" }} />
+            </span>
+            Professional Peptide Research Chemicals
           </div>
 
-          <h1 className="font-black leading-none mb-5 animate-fade-in-up"
-            style={{
-              fontSize: "clamp(3.2rem, 8vw, 6rem)",
-              color: "#1c1917",
-              letterSpacing: "-0.04em",
-            }}>
+          <h1 className="font-black leading-none mb-6 animate-fade-in-up"
+            style={{ fontSize: "clamp(3.4rem, 8.5vw, 6.5rem)", letterSpacing: "-0.04em", color: "#1c1917" }}>
             Gills{" "}
-            <span style={{
-              background: "linear-gradient(135deg, #01696f 0%, #8b5cf6 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}>
-              Bio Lab
-            </span>
+            <span className="gradient-text">Bio Lab</span>
           </h1>
 
           <p className="text-xl sm:text-2xl font-light mb-5 animate-fade-in-up delay-100"
@@ -93,52 +85,83 @@ export default function HomePage() {
             Advanced Peptide Research Chemicals
           </p>
 
-          <p className="text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in-up delay-200"
+          <p className="text-base sm:text-lg max-w-2xl mx-auto mb-12 leading-relaxed animate-fade-in-up delay-200"
             style={{ color: "#9c9590" }}>
-            High-purity peptide research chemicals for serious laboratories and qualified professionals.
-            Every compound supplied strictly for in vitro research — never for human or veterinary use.
+            High-purity compounds for serious laboratories and qualified professionals.
+            Every product supplied strictly for in vitro research.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 animate-fade-in-up delay-300">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 animate-fade-in-up delay-300">
             <Link href="/catalog"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl text-sm font-bold transition-all hover:scale-105"
+              className="btn-shimmer inline-flex items-center gap-2 px-9 py-4 rounded-xl text-sm font-bold transition-all hover:scale-105 hover:-translate-y-0.5"
               style={{
                 background: "linear-gradient(135deg, #01696f, #018a92)",
                 color: "#ffffff",
-                boxShadow: "0 4px 24px rgba(1,105,111,0.30), inset 0 1px 0 rgba(255,255,255,0.15)",
+                boxShadow: "0 6px 28px rgba(1,105,111,0.35), 0 2px 8px rgba(1,105,111,0.20), inset 0 1px 0 rgba(255,255,255,0.18)",
               }}>
               Browse Research Catalog
               <ChevronRight className="w-4 h-4" />
             </Link>
+            <Link href="/contact"
+              className="inline-flex items-center gap-2 px-7 py-4 rounded-xl text-sm font-semibold transition-all hover:scale-105"
+              style={{
+                backgroundColor: "rgba(255,255,255,0.80)",
+                border: "1px solid rgba(28,25,23,0.14)",
+                color: "#3d3833",
+                boxShadow: "0 2px 12px rgba(28,25,23,0.06), inset 0 1px 0 rgba(255,255,255,0.90)",
+                backdropFilter: "blur(12px)",
+              }}>
+              Request a Quote
+            </Link>
           </div>
 
-          <p className="text-xs animate-fade-in-up delay-400" style={{ color: "#9c9590" }}>
-            All orders limited to qualified researchers and institutions.{" "}
+          {/* Trust micro-badges */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-8 animate-fade-in-up delay-400">
+            {["≥ 98% Purity", "Lot-Specific CoA", "Discreet Shipping", "RUO Compliant"].map((t) => (
+              <span key={t} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-semibold"
+                style={{ backgroundColor: "rgba(255,255,255,0.65)", border: "1px solid rgba(28,25,23,0.10)", color: "#6b6560", backdropFilter: "blur(8px)" }}>
+                <span className="w-1 h-1 rounded-full" style={{ backgroundColor: "#01696f" }} />
+                {t}
+              </span>
+            ))}
+          </div>
+
+          <p className="text-xs animate-fade-in-up delay-500" style={{ color: "#9c9590" }}>
+            Limited to qualified researchers and institutions.{" "}
             <span style={{ color: "#dc2626" }}>Not for human consumption.</span>
           </p>
         </div>
 
         {/* Fade-out bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none"
+        <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
           style={{ background: "linear-gradient(to bottom, transparent, var(--bg-base))" }} />
       </section>
 
-      {/* ── TRUST STRIP ──────────────────────────────────────────────────── */}
-      <section style={{
-        backgroundColor: "var(--bg-elevated)",
-        borderTop: "1px solid rgba(28,25,23,0.08)",
-        borderBottom: "1px solid rgba(28,25,23,0.08)",
-      }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3">
-            {trustItems.map((item, i) => (
-              <div key={item.label} className="flex items-center gap-2.5">
-                {i > 0 && (
-                  <span className="hidden sm:block w-px h-4" style={{ backgroundColor: "rgba(28,25,23,0.12)" }} />
-                )}
-                <span className="text-xs font-bold tracking-widest uppercase" style={{ color: "#01696f" }}>
-                  {item.label}
-                </span>
+      {/* ── TICKER STRIP ─────────────────────────────────────────────────── */}
+      <section className="overflow-hidden"
+        style={{
+          backgroundColor: "#01696f",
+          borderTop: "1px solid rgba(255,255,255,0.10)",
+        }}>
+        <div className="flex items-center py-2.5">
+          <div className="animate-ticker flex items-center gap-0 whitespace-nowrap">
+            {[...Array(2)].map((_, gi) => (
+              <div key={gi} className="flex items-center">
+                {[
+                  "≥ 98% Purity Guaranteed",
+                  "Lot-Specific CoA Available",
+                  "Discreet Professional Shipping",
+                  "Research Use Only",
+                  "Qualified Labs & Institutions",
+                  "Peptide Research Chemicals",
+                  "Fast Order Processing",
+                  "Transparent Pricing",
+                ].map((t, i) => (
+                  <div key={`${gi}-${i}`} className="flex items-center">
+                    <span className="px-8 text-[11px] font-semibold tracking-widest uppercase text-white/90">{t}</span>
+                    <span className="text-white/30 text-xs">◈</span>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
@@ -204,15 +227,34 @@ export default function HomePage() {
           </RevealSection>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {benefits.map((b) => (
+            {benefits.map((b, i) => (
               <RevealSection key={b.title}>
-                <div className="glass-card rounded-2xl p-6 h-full transition-all group">
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 transition-transform group-hover:scale-110"
-                    style={{ background: "linear-gradient(135deg, rgba(1,105,111,0.10), rgba(139,92,246,0.08))" }}>
-                    <b.icon className="w-5 h-5" style={{ color: "#01696f" }} />
+                <div className="glass-card rounded-2xl p-6 h-full group cursor-default"
+                  style={{ transition: "box-shadow 0.3s ease, transform 0.3s ease" }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 48px rgba(1,105,111,0.14), 0 0 0 1px rgba(1,105,111,0.22)";
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.transform = "";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "";
+                  }}>
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-all group-hover:scale-110 group-hover:rotate-3"
+                    style={{
+                      background: i % 2 === 0
+                        ? "linear-gradient(135deg, rgba(1,105,111,0.14), rgba(1,105,111,0.06))"
+                        : "linear-gradient(135deg, rgba(139,92,246,0.12), rgba(139,92,246,0.05))",
+                      boxShadow: i % 2 === 0
+                        ? "0 4px 16px rgba(1,105,111,0.12)"
+                        : "0 4px 16px rgba(139,92,246,0.10)",
+                    }}>
+                    <b.icon className="w-5 h-5" style={{ color: i % 2 === 0 ? "#01696f" : "#7c3aed" }} />
                   </div>
                   <h3 className="font-black text-sm mb-2" style={{ color: "#1c1917" }}>{b.title}</h3>
                   <p className="text-xs leading-relaxed" style={{ color: "#9c9590" }}>{b.desc}</p>
+                  {/* Subtle bottom accent line */}
+                  <div className="mt-4 h-px w-8 rounded-full transition-all group-hover:w-14"
+                    style={{ background: i % 2 === 0 ? "rgba(1,105,111,0.35)" : "rgba(139,92,246,0.35)" }} />
                 </div>
               </RevealSection>
             ))}
