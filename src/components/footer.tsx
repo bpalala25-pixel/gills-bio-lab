@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Download } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -31,12 +30,6 @@ export default function Footer() {
             <p className="text-sm leading-relaxed mb-5" style={{ color: "#6b6560" }}>
               Professional, lab-grade peptide research chemicals for serious laboratories.
             </p>
-            <a href="/price-list.pdf"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:scale-105"
-              style={{ backgroundColor: "rgba(1,137,146,0.12)", color: "#018a92", border: "1px solid rgba(1,137,146,0.25)" }}>
-              <Download className="w-4 h-4" />
-              Download Price List
-            </a>
           </div>
 
           {/* Navigate */}

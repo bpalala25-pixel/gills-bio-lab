@@ -1,6 +1,6 @@
 "use client";
 import { useState, useMemo } from "react";
-import { Search, SlidersHorizontal, X, Download } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import ProductCard from "@/components/product-card";
 import { products, categories } from "@/lib/products";
 
@@ -68,16 +68,6 @@ export default function CatalogPage() {
             All products are intended strictly for in vitro and laboratory research only.
           </p>
           <div className="flex flex-wrap gap-3 mt-6">
-            <a href="/price-list.pdf"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all hover:scale-105"
-              style={{
-                background: "linear-gradient(135deg, #01696f, #018a92)",
-                color: "#ffffff",
-                boxShadow: "0 4px 16px rgba(1,105,111,0.25)",
-              }}>
-              <Download className="w-4 h-4" />
-              Download Price List
-            </a>
             <span className="px-3 py-2 rounded-lg text-sm font-medium"
               style={{
                 backgroundColor: "rgba(255,255,255,0.72)",

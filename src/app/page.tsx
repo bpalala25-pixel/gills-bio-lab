@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Download, ChevronRight, ShieldCheck, Truck, BookOpen, Award, DollarSign, Headphones } from "lucide-react";
+import { ChevronRight, ShieldCheck, Truck, BookOpen, Award, DollarSign, Headphones } from "lucide-react";
 import MolecularBg from "@/components/molecular-bg";
 import ProductCard from "@/components/product-card";
 import { featuredProducts } from "@/lib/products";
@@ -110,12 +110,6 @@ export default function HomePage() {
               Browse Research Catalog
               <ChevronRight className="w-4 h-4" />
             </Link>
-            <a href="/price-list.pdf"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl text-sm font-semibold transition-all hover:bg-black/5"
-              style={{ border: "1px solid rgba(28,25,23,0.14)", color: "#3d3833" }}>
-              <Download className="w-4 h-4" />
-              Download Price List
-            </a>
           </div>
 
           <p className="text-xs animate-fade-in-up delay-400" style={{ color: "#9c9590" }}>
