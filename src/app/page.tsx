@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Download, ChevronRight, ShieldCheck, Truck, BookOpen, Award, DollarSign, Headphones } from "lucide-react";
 import MolecularBg from "@/components/molecular-bg";
 import ProductCard from "@/components/product-card";
-import RetatrutideExhibit from "@/components/retatrutide-exhibit";
 import { featuredProducts } from "@/lib/products";
 import { useEffect, useRef } from "react";
 
@@ -151,9 +150,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* ── RETATRUTIDE EXHIBIT ───────────────────────────────────────────── */}
-      <RetatrutideExhibit />
 
       {/* ── FEATURED PRODUCTS ────────────────────────────────────────────── */}
       <section className="py-24" style={{ backgroundColor: "var(--bg-base)" }}>
