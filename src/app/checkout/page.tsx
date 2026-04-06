@@ -21,6 +21,25 @@ const CRYPTO_COINS = [
 
 const CASHAPP_TAG = "$GillsResearch";
 
+// State sales tax rates (combined state rate)
+const STATE_TAX_RATES: Record<string, number> = {
+  AL: 0.04, AK: 0.00, AZ: 0.056, AR: 0.065, CA: 0.0725,
+  CO: 0.029, CT: 0.0635, DE: 0.00, FL: 0.06, GA: 0.04,
+  HI: 0.04, ID: 0.06, IL: 0.0625, IN: 0.07, IA: 0.06,
+  KS: 0.065, KY: 0.06, LA: 0.0445, ME: 0.055, MD: 0.06,
+  MA: 0.0625, MI: 0.06, MN: 0.06875, MS: 0.07, MO: 0.04225,
+  MT: 0.00, NE: 0.055, NV: 0.0685, NH: 0.00, NJ: 0.06625,
+  NM: 0.05125, NY: 0.04, NC: 0.0475, ND: 0.05, OH: 0.0575,
+  OK: 0.045, OR: 0.00, PA: 0.06, RI: 0.07, SC: 0.06,
+  SD: 0.045, TN: 0.07, TX: 0.0625, UT: 0.0485, VT: 0.06,
+  VA: 0.053, WA: 0.065, WV: 0.06, WI: 0.05, WY: 0.04,
+  DC: 0.06,
+};
+
+const FEDERAL_TAX_RATE = 0.01; // 1% federal excise
+const EXPRESS_SHIPPING_COST = 23.99;
+const FREE_SHIPPING_THRESHOLD = 420;
+
 const inputStyle = {
   backgroundColor: "rgba(255,255,255,0.85)",
   border: "1px solid rgba(28,25,23,0.12)",
@@ -48,9 +67,21 @@ export default function CheckoutPage() {
   const [placing, setPlacing] = useState(false);
   const [placeError, setPlaceError] = useState("");
 
+  // Tax & shipping calculations
+  const stateCode = shipping.state.trim().toUpperCase();
+  const stateTaxRate = STATE_TAX_RATES[stateCode] ?? 0;
+  const stateTax = total * stateTaxRate;
+  const federalTax = total * FEDERAL_TAX_RATE;
+  const totalTax = stateTax + federalTax;
+
+  const shippingCost = shipping.method === "express"
+    ? (total >= FREE_SHIPPING_THRESHOLD ? 0 : EXPRESS_SHIPPING_COST)
+    : 0;
+
+  const subtotalWithTax = total + totalTax + shippingCost;
   const isCrypto = paymentMethod === "crypto";
-  const discountedTotal = isCrypto ? total * 0.9 : total;
-  const savings = isCrypto ? total * 0.1 : 0;
+  const discountedTotal = isCrypto ? subtotalWithTax * 0.9 : subtotalWithTax;
+  const savings = isCrypto ? subtotalWithTax * 0.1 : 0;
   const activeCoin = CRYPTO_COINS.find(c => c.id === selectedCoin)!;
 
   function copyAddress() {
@@ -78,7 +109,11 @@ export default function CheckoutPage() {
             quantity: i.quantity,
             unitPrice: i.unitPrice,
           })),
-          total,
+          subtotal: total,
+          stateTax,
+          federalTax,
+          shippingCost,
+          grandTotal: subtotalWithTax,
           discountedTotal,
           savings,
         }),
@@ -272,8 +307,20 @@ export default function CheckoutPage() {
                   </label>
                   <div className="space-y-2">
                     {[
-                      { id: "standard", label: "Standard Shipping", est: "5-7 business days", price: "Calculated at order" },
-                      { id: "express", label: "Express Shipping", est: "2-3 business days", price: "Calculated at order" },
+                      {
+                        id: "standard",
+                        label: "Standard Shipping",
+                        est: "5-7 business days",
+                        price: "FREE",
+                        note: "Always free",
+                      },
+                      {
+                        id: "express",
+                        label: "Express Shipping",
+                        est: "2-3 business days",
+                        price: total >= FREE_SHIPPING_THRESHOLD ? "FREE" : `$${EXPRESS_SHIPPING_COST.toFixed(2)}`,
+                        note: total >= FREE_SHIPPING_THRESHOLD ? "Free — order over $420" : "Free on orders over $420",
+                      },
                     ].map((m) => (
                       <button
                         key={m.id}
@@ -287,9 +334,12 @@ export default function CheckoutPage() {
                       >
                         <div>
                           <span className="font-semibold">{m.label}</span>
-                          <span className="block text-xs mt-0.5" style={{ color: "#9c9590" }}>{m.est}</span>
+                          <span className="block text-xs mt-0.5" style={{ color: "#9c9590" }}>{m.est} · {m.note}</span>
                         </div>
-                        <span className="text-xs">{m.price}</span>
+                        <span className="text-sm font-bold shrink-0 ml-3"
+                          style={{ color: m.price === "FREE" ? "#01696f" : "#1c1917" }}>
+                          {m.price}
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -355,7 +405,7 @@ export default function CheckoutPage() {
                         </div>
                         <p className="text-lg font-black" style={{ color: "#1c1917" }}>{CASHAPP_TAG}</p>
                         <p className="text-[10px] mt-1" style={{ color: "#9c9590" }}>Cash App Cashtag</p>
-                        <p className="text-base font-bold mt-2" style={{ color: "#01696f" }}>${total.toFixed(2)}</p>
+                        <p className="text-base font-bold mt-2" style={{ color: "#01696f" }}>${subtotalWithTax.toFixed(2)}</p>
                       </div>
                     </div>
                     <ol className="space-y-2 text-xs mb-4" style={{ color: "#6b6560" }}>
@@ -367,7 +417,7 @@ export default function CheckoutPage() {
                       <li className="flex items-start gap-2">
                         <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5"
                           style={{ backgroundColor: "rgba(1,105,111,0.10)", color: "#01696f" }}>2</span>
-                        Send <strong className="mx-1" style={{ color: "#1c1917" }}>${total.toFixed(2)}</strong> to <strong className="mx-1" style={{ color: "#1c1917" }}>{CASHAPP_TAG}</strong>.
+                        Send <strong className="mx-1" style={{ color: "#1c1917" }}>${subtotalWithTax.toFixed(2)}</strong> to <strong className="mx-1" style={{ color: "#1c1917" }}>{CASHAPP_TAG}</strong>.
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5"
@@ -405,7 +455,7 @@ export default function CheckoutPage() {
                     <div className="flex items-center justify-between p-3 rounded-xl mb-4 text-sm"
                       style={{ backgroundColor: "rgba(1,105,111,0.05)", border: "1px solid rgba(1,105,111,0.14)" }}>
                       <div style={{ color: "#6b6560" }}>
-                        <span>Original: </span><span className="line-through">${total.toFixed(2)}</span>
+                        <span>Original: </span><span className="line-through">${subtotalWithTax.toFixed(2)}</span>
                         <span className="mx-2">→</span>
                         <span className="text-xs" style={{ color: "#01696f" }}>Save ${savings.toFixed(2)}</span>
                       </div>
@@ -534,6 +584,33 @@ export default function CheckoutPage() {
                       <span className="font-bold text-sm" style={{ color: "#1c1917" }}>${(item.unitPrice * item.quantity).toFixed(2)}</span>
                     </div>
                   ))}
+
+                  {/* Tax & shipping breakdown */}
+                  <div className="px-4 py-3 space-y-2" style={{ borderTop: "1px solid rgba(28,25,23,0.06)", backgroundColor: "rgba(28,25,23,0.015)" }}>
+                    <div className="flex justify-between text-xs" style={{ color: "#9c9590" }}>
+                      <span>Subtotal</span>
+                      <span>${total.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-xs" style={{ color: "#9c9590" }}>
+                      <span>
+                        State Tax {stateCode && STATE_TAX_RATES[stateCode] !== undefined
+                          ? `(${stateCode} ${(stateTaxRate * 100).toFixed(2)}%)`
+                          : "(enter state above)"}
+                      </span>
+                      <span>${stateTax.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-xs" style={{ color: "#9c9590" }}>
+                      <span>Federal Excise (1%)</span>
+                      <span>${federalTax.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-xs" style={{ color: "#9c9590" }}>
+                      <span>Shipping ({shipping.method === "express" ? "Express" : "Standard"})</span>
+                      <span style={{ color: shippingCost === 0 ? "#01696f" : "#1c1917" }}>
+                        {shippingCost === 0 ? "FREE" : `$${shippingCost.toFixed(2)}`}
+                      </span>
+                    </div>
+                  </div>
+
                   <div className="px-4 py-3 flex items-center justify-between"
                     style={{ borderTop: "1px solid rgba(28,25,23,0.06)" }}>
                     <div className="flex items-center gap-2">
@@ -541,7 +618,7 @@ export default function CheckoutPage() {
                       {isCrypto && <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: "rgba(1,105,111,0.08)", color: "#01696f" }}>10% crypto discount</span>}
                     </div>
                     <div className="text-right">
-                      {isCrypto && <div className="text-xs line-through font-normal" style={{ color: "#9c9590" }}>${total.toFixed(2)}</div>}
+                      {isCrypto && <div className="text-xs line-through font-normal" style={{ color: "#9c9590" }}>${subtotalWithTax.toFixed(2)}</div>}
                       <span className="font-black text-lg" style={{ color: "#01696f" }}>${discountedTotal.toFixed(2)}</span>
                     </div>
                   </div>
@@ -668,11 +745,44 @@ export default function CheckoutPage() {
                   </div>
                 ))}
               </div>
-              <div className="pt-3" style={{ borderTop: "1px solid rgba(28,25,23,0.08)" }}>
+
+              {/* Tax + shipping breakdown in sidebar */}
+              <div className="space-y-1.5 py-3" style={{ borderTop: "1px solid rgba(28,25,23,0.08)", borderBottom: "1px solid rgba(28,25,23,0.08)" }}>
+                <div className="flex justify-between text-xs" style={{ color: "#9c9590" }}>
+                  <span>Subtotal</span>
+                  <span>${total.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-xs" style={{ color: "#9c9590" }}>
+                  <span>
+                    {stateCode && STATE_TAX_RATES[stateCode] !== undefined
+                      ? `State Tax (${stateCode} ${(stateTaxRate * 100).toFixed(2)}%)`
+                      : "State Tax"}
+                  </span>
+                  <span>
+                    {stateCode && STATE_TAX_RATES[stateCode] !== undefined
+                      ? `$${stateTax.toFixed(2)}`
+                      : "—"}
+                  </span>
+                </div>
+                <div className="flex justify-between text-xs" style={{ color: "#9c9590" }}>
+                  <span>Federal Excise (1%)</span>
+                  <span>${federalTax.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-xs" style={{ color: "#9c9590" }}>
+                  <span>Shipping</span>
+                  <span style={{ color: shippingCost === 0 ? "#01696f" : "#9c9590" }}>
+                    {shipping.method === "express"
+                      ? shippingCost === 0 ? "FREE" : `$${shippingCost.toFixed(2)}`
+                      : "FREE"}
+                  </span>
+                </div>
+              </div>
+
+              <div className="pt-3">
                 <div className="flex justify-between font-black text-sm">
                   <span style={{ color: "#1c1917" }}>Total</span>
                   <div className="text-right">
-                    {isCrypto && <div className="text-xs line-through font-normal" style={{ color: "#9c9590" }}>${total.toFixed(2)}</div>}
+                    {isCrypto && <div className="text-xs line-through font-normal" style={{ color: "#9c9590" }}>${subtotalWithTax.toFixed(2)}</div>}
                     <span style={{ color: "#01696f" }}>${discountedTotal.toFixed(2)}</span>
                   </div>
                 </div>
