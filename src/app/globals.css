@@ -177,6 +177,16 @@
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+@keyframes shipping-flash {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.70; }
+}
+@keyframes shipping-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-shipping-flash  { animation: shipping-flash  2.2s ease-in-out infinite; }
+.animate-shipping-scroll { animation: shipping-scroll 18s linear infinite; }
 
 /* Retatrutide 3-D exhibit */
 @keyframes ret-glow-pulse {
