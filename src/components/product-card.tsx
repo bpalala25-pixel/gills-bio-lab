@@ -1,10 +1,12 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ShoppingCart, FlaskConical, Star } from "lucide-react";
+import { ShoppingCart, Star } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/lib/cart-context";
 import type { Product } from "@/lib/products";
+import VialImage, { getVialColors } from "@/components/vial-image";
 
 interface Props {
   product: Product;
@@ -25,21 +27,43 @@ export default function ProductCard({ product }: Props) {
     }, 800);
   }
 
+  const { cap, accent } = getVialColors(product.category);
+
   return (
     <div className="group relative flex flex-col rounded-xl border border-white/8 overflow-hidden transition-all duration-300 hover:border-[#2dd4bf]/30 hover:shadow-lg hover:shadow-[#2dd4bf]/5"
       style={{ backgroundColor: "#161b22" }}>
       {/* Top image area */}
-      <div className="relative h-40 flex items-center justify-center overflow-hidden"
+      <div className="relative h-48 flex items-center justify-center overflow-hidden"
         style={{ background: "linear-gradient(135deg, #1c2333, #0d1117)" }}>
-        <div className="w-20 h-20 rounded-full flex items-center justify-center opacity-20 group-hover:opacity-30 transition-opacity"
-          style={{ background: "radial-gradient(circle, #2dd4bf40, transparent)" }}>
-          <FlaskConical className="w-10 h-10" style={{ color: "#2dd4bf" }} />
-        </div>
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
+
+        {product.image ? (
+          <div className="relative w-full h-full flex items-center justify-center py-2">
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              className="object-contain p-3 transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            />
+          </div>
+        ) : (
+          <div className="w-28 h-44 transition-transform duration-500 group-hover:scale-105">
+            <VialImage
+              name={product.code}
+              quantity={product.quantity}
+              capColor={cap}
+              labelColor={accent}
+              className="w-full h-full"
+            />
+          </div>
+        )}
+
+        {/* Subtle glow on hover */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
           style={{ background: "radial-gradient(circle at 50% 50%, #2dd4bf08, transparent 70%)" }} />
 
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
           {product.labFavorite && (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold"
               style={{ backgroundColor: "#2dd4bf20", color: "#2dd4bf", border: "1px solid #2dd4bf30" }}>
@@ -61,7 +85,7 @@ export default function ProductCard({ product }: Props) {
           )}
         </div>
 
-        <span className="absolute top-3 right-3 text-[10px] font-medium px-2 py-0.5 rounded-full"
+        <span className="absolute top-3 right-3 z-10 text-[10px] font-medium px-2 py-0.5 rounded-full"
           style={{ backgroundColor: "#f8514910", color: "#f85149", border: "1px solid #f8514920" }}>
           Research Only
         </span>

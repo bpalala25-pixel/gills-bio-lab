@@ -17,6 +17,7 @@ export interface Product {
   labFavorite?: boolean;
   badge?: string;
   slug: string;
+  image?: string;
 }
 
 export const products: Product[] = [
@@ -24,6 +25,7 @@ export const products: Product[] = [
   {
     id: "bpc-157",
     slug: "bpc-157",
+    image: "/images/bpc-157.png",
     name: "BPC-157",
     code: "BPC-157",
     category: "Peptides",
@@ -196,6 +198,7 @@ export const products: Product[] = [
   {
     id: "selank",
     slug: "selank",
+    image: "/images/selank.png",
     name: "Selank",
     code: "SEL",
     category: "Neuropeptides",
@@ -470,6 +473,7 @@ export const products: Product[] = [
   {
     id: "ss-31",
     slug: "ss-31",
+    image: "/images/ss-31.png",
     name: "SS-31",
     code: "SS-31",
     category: "Mitochondrial Research",
@@ -509,6 +513,7 @@ export const products: Product[] = [
   {
     id: "cjc-ipa-blend-5",
     slug: "cjc-ipa-blend-5",
+    image: "/images/cjc-ipa.png",
     name: "CJC-1295 No DAC + Ipamorelin 5+5",
     code: "CJC+IPA-5",
     category: "Blends",
@@ -529,6 +534,7 @@ export const products: Product[] = [
   {
     id: "cjc-ipa-blend-10",
     slug: "cjc-ipa-blend-10",
+    image: "/images/cjc-ipa.png",
     name: "CJC-1295 No DAC + Ipamorelin 10+10",
     code: "CJC+IPA-10",
     category: "Blends",
@@ -644,6 +650,7 @@ export const products: Product[] = [
   {
     id: "ghk-cu-10",
     slug: "ghk-cu-10",
+    image: "/images/ghk-cu.png",
     name: "GHK-Cu 10 mg",
     code: "GHK-10",
     category: "Peptides",
@@ -664,6 +671,7 @@ export const products: Product[] = [
   {
     id: "ghk-cu-100",
     slug: "ghk-cu-100",
+    image: "/images/ghk-cu.png",
     name: "GHK-Cu 100 mg",
     code: "GHK-100",
     category: "Peptides",
@@ -683,6 +691,7 @@ export const products: Product[] = [
   {
     id: "mots-c",
     slug: "mots-c",
+    image: "/images/mots-c.webp",
     name: "MOTS-C",
     code: "MOTS",
     category: "Mitochondrial Research",
@@ -743,6 +752,7 @@ export const products: Product[] = [
   {
     id: "nad-plus",
     slug: "nad-plus",
+    image: "/images/nad-plus.png",
     name: "NAD+",
     code: "NAD+",
     category: "Metabolic / NAD",
@@ -764,6 +774,7 @@ export const products: Product[] = [
   {
     id: "kpv",
     slug: "kpv",
+    image: "/images/kpv.png",
     name: "KPV",
     code: "KPV",
     category: "Peptides",
@@ -783,6 +794,7 @@ export const products: Product[] = [
   {
     id: "glow-blend",
     slug: "glow-blend",
+    image: "/images/glow-blend.png",
     name: "\"Glow\" Blend",
     code: "GLOW",
     category: "Blends",
