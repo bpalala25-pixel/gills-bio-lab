@@ -41,6 +41,8 @@ export default function CheckoutPage() {
   const [confirmTerms, setConfirmTerms] = useState(false);
   const [confirmWaiver, setConfirmWaiver] = useState(false);
   const [showWaiver, setShowWaiver] = useState(false);
+  const [placing, setPlacing] = useState(false);
+  const [placeError, setPlaceError] = useState("");
 
   const isCrypto = paymentMethod === "crypto";
   const discountedTotal = isCrypto ? total * 0.9 : total;
@@ -55,7 +57,33 @@ export default function CheckoutPage() {
 
   function stepIndex(s: Step) { return STEPS.findIndex(x => x.id === s); }
 
-  function placeOrder() {
+  async function placeOrder() {
+    setPlacing(true);
+    setPlaceError("");
+    try {
+      await fetch("/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          info,
+          shipping,
+          paymentMethod,
+          items: items.map(i => ({
+            name: i.product.name,
+            selectedQty: i.selectedQty,
+            quantity: i.quantity,
+            unitPrice: i.unitPrice,
+          })),
+          total,
+          discountedTotal,
+          savings,
+        }),
+      });
+    } catch {
+      // Non-blocking — order still goes through even if email fails
+    } finally {
+      setPlacing(false);
+    }
     clearCart();
     setPlaced(true);
   }
@@ -618,13 +646,18 @@ export default function CheckoutPage() {
                     style={{ border: "1px solid rgba(28,25,23,0.12)", color: "#3d3833" }}>
                     Back
                   </button>
+                  {placeError && (
+                    <p className="text-xs p-3 rounded-xl" style={{ backgroundColor: "rgba(220,38,38,0.06)", border: "1px solid rgba(220,38,38,0.15)", color: "#b91c1c" }}>
+                      {placeError}
+                    </p>
+                  )}
                   <button
                     onClick={placeOrder}
-                    disabled={!confirmResearch || !confirmTerms || !confirmWaiver}
+                    disabled={!confirmResearch || !confirmTerms || !confirmWaiver || placing}
                     className="flex-1 py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
                     style={{ background: "linear-gradient(135deg, #01696f, #018a92)", color: "#ffffff", boxShadow: "0 4px 20px rgba(1,105,111,0.25)" }}
                   >
-                    Place Research Order
+                    {placing ? "Placing Order…" : "Place Research Order"}
                   </button>
                 </div>
               </div>

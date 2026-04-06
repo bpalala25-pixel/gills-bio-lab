@@ -4,13 +4,35 @@ import { Mail, MessageSquare, CheckCircle } from "lucide-react";
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "", institution: "", email: "", subject: "general", message: "", confirm: false,
   });
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSent(true);
+    setSending(true);
+    setError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          institution: form.institution,
+          email: form.email,
+          subject: form.subject,
+          message: form.message,
+        }),
+      });
+      if (!res.ok) throw new Error("Send failed");
+      setSent(true);
+    } catch {
+      setError("Something went wrong. Please try again or email us directly at gillsbiolab@outlook.com.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -185,12 +207,19 @@ export default function ContactPage() {
                   </label>
                 </div>
 
+                {error && (
+                  <p className="text-xs p-3 rounded-xl" style={{ backgroundColor: "rgba(220,38,38,0.06)", border: "1px solid rgba(220,38,38,0.15)", color: "#b91c1c" }}>
+                    {error}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full py-4 rounded-xl text-sm font-bold transition-all hover:scale-105"
+                  disabled={sending}
+                  className="w-full py-4 rounded-xl text-sm font-bold transition-all hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed"
                   style={{ background: "linear-gradient(135deg, #01696f, #018a92)", color: "#ffffff", boxShadow: "0 4px 20px rgba(1,105,111,0.25)" }}
                 >
-                  Send Message
+                  {sending ? "Sending…" : "Send Message"}
                 </button>
               </form>
             )}
