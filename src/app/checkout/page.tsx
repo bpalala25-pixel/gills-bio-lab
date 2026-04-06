@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { CheckCircle, FlaskConical, AlertTriangle } from "lucide-react";
+import { CheckCircle, FlaskConical, AlertTriangle, Lock } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 
 type Step = "info" | "shipping" | "payment" | "review";
