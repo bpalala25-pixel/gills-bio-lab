@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>retatrutide-360-viewer</title>
+<style>
+:root {
+  --bg:#f7f6f2; --surface:#ffffff; --text:#28251d; --muted:#6b6b68; --border:rgba(40,37,29,.12); --primary:#01696f;
+  --radius:22px; --shadow:0 18px 50px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box} html,body{margin:0;padding:0} body{font-family:Arial,sans-serif;background:linear-gradient(180deg,#faf9f7,#f2f0eb);color:var(--text);min-height:100vh}
+.wrap{max-width:980px;margin:0 auto;padding:24px}
+.card{background:rgba(255,255,255,.78);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.top{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--border)}
+.title{font-size:clamp(22px,3vw,34px);font-weight:700;letter-spacing:.02em}
+.sub{font-size:14px;color:var(--muted)}
+.stage{position:relative;padding:18px;display:grid;place-items:center;min-height:72vh;background:radial-gradient(circle at top, rgba(161,120,200,.12), transparent 28%), linear-gradient(180deg,#fcfcfb,#f4f2ee)}
+.viewer{position:relative;width:min(100%,540px);aspect-ratio:2/3;display:grid;place-items:center;touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden}
+.product{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 20px 34px rgba(0,0,0,.12));transform-origin:center center;transition:transform .08s linear}
+.hint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.9);border:1px solid var(--border);padding:10px 14px;border-radius:999px;font-size:13px;color:var(--muted);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;padding:14px 18px;border-top:1px solid var(--border);align-items:center}
+button{border:1px solid var(--border);background:#fff;padding:10px 14px;border-radius:999px;font-size:14px;cursor:pointer;min-height:44px}
+button.primary{background:var(--primary);color:#fff;border-color:transparent}
+.stat{font-size:14px;color:var(--muted);margin-left:auto}
+@media (max-width:640px){.wrap{padding:12px}.stage{min-height:66vh;padding:10px}.top{align-items:flex-start;flex-direction:column}.stat{width:100%;margin-left:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="card">
+    <div class="top">
+      <div>
+        <div class="title">Retatrutide viewer</div>
+        <div class="sub">Drag left or right to simulate spin. Pinch or use buttons to zoom.</div>
+      </div>
+      <div class="sub">Single-photo mode: visual spin effect, not true 3D.</div>
+    </div>
+    <div class="stage">
+      <div class="viewer" id="viewer" aria-label="Swipeable product viewer">
+        <img id="product" class="product" src="retatrutide_edit.jpg" alt="Retatrutide vial product photo" draggable="false">
+      </div>
+      <div class="hint" id="hint">Swipe or drag</div>
+    </div>
+    <div class="controls">
+      <button id="leftBtn" aria-label="Rotate left">Rotate left</button>
+      <button id="rightBtn" aria-label="Rotate right">Rotate right</button>
+      <button id="zoomOut" aria-label="Zoom out">- Zoom</button>
+      <button id="zoomIn" class="primary" aria-label="Zoom in">+ Zoom</button>
+      <button id="resetBtn" aria-label="Reset view">Reset</button>
+      <div class="stat" id="stat">Rotation 0° · Zoom 1.00x</div>
+    </div>
+  </section>
+</div>
+<script>
+(() => {
+  const viewer = document.getElementById('viewer');
+  const img = document.getElementById('product');
+  const stat = document.getElementById('stat');
+  const hint = document.getElementById('hint');
+  let rot = 0, zoom = 1, dragging = false, startX = 0, startRot = 0;
+
+  function render(){
+    const y = Math.sin(rot * Math.PI / 180) * 6;
+    const sx = Math.max(0.78, Math.abs(Math.cos(rot * Math.PI / 180)) * 0.22 + 0.78);
+    img.style.transform = `translateY(${y}px) scale(${zoom}) rotateZ(${rot * 0.02}deg) scaleX(${sx})`;
+    stat.textContent = `Rotation ${Math.round(rot)}° · Zoom ${zoom.toFixed(2)}x`;
+  }
+
+  function beginDrag(clientX){ dragging = true; startX = clientX; startRot = rot; hint.style.display='none'; }
+  function moveDrag(clientX){ if(!dragging) return; const dx = clientX - startX; rot = startRot + dx * 0.45; render(); }
+  function endDrag(){ dragging = false; }
+
+  viewer.addEventListener('pointerdown', e => { viewer.setPointerCapture(e.pointerId); beginDrag(e.clientX); });
+  viewer.addEventListener('pointermove', e => moveDrag(e.clientX));
+  viewer.addEventListener('pointerup', endDrag);
+  viewer.addEventListener('pointercancel', endDrag);
+
+  viewer.addEventListener('wheel', e => {
+    e.preventDefault();
+    zoom += e.deltaY < 0 ? 0.05 : -0.05;
+    zoom = Math.min(2.4, Math.max(0.7, zoom));
+    hint.style.display='none';
+    render();
+  }, { passive:false });
+
+  const active = new Map();
+  let pinchStart = null, pinchZoomStart = 1;
+  function distance(a,b){ const dx=a.clientX-b.clientX, dy=a.clientY-b.clientY; return Math.hypot(dx,dy); }
+
+  viewer.addEventListener('pointerdown', e => {
+    active.set(e.pointerId, e);
+    if(active.size === 2){ const vals = [...active.values()]; pinchStart = distance(vals[0], vals[1]); pinchZoomStart = zoom; }
+  });
+  viewer.addEventListener('pointermove', e => {
+    if(active.has(e.pointerId)) active.set(e.pointerId, e);
+    if(active.size === 2 && pinchStart){
+      const vals = [...active.values()];
+      const d = distance(vals[0], vals[1]);
+      zoom = Math.min(2.4, Math.max(0.7, pinchZoomStart * (d / pinchStart)));
+      hint.style.display='none';
+      render();
+    }
+  });
+  ['pointerup','pointercancel'].forEach(type => viewer.addEventListener(type, e => {
+    active.delete(e.pointerId);
+    if(active.size < 2) pinchStart = null;
+  }));
+
+  document.getElementById('leftBtn').addEventListener('click', () => { rot -= 20; hint.style.display='none'; render(); });
+  document.getElementById('rightBtn').addEventListener('click', () => { rot += 20; hint.style.display='none'; render(); });
+  document.getElementById('zoomIn').addEventListener('click', () => { zoom = Math.min(2.4, zoom + 0.1); render(); });
+  document.getElementById('zoomOut').addEventListener('click', () => { zoom = Math.max(0.7, zoom - 0.1); render(); });
+  document.getElementById('resetBtn').addEventListener('click', () => { rot = 0; zoom = 1; hint.style.display=''; render(); });
+  img.addEventListener('dragstart', e => e.preventDefault());
+  render();
+})();
+</script>
+</body>
+</html>

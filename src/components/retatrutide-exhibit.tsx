@@ -1,44 +1,230 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, RotateCcw } from "lucide-react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
+/* ─── CSS for background atmosphere only ─────────────────────────────────── */
 const styles = `
-@keyframes ret-float {
-  0%,100% { transform: perspective(900px) rotateY(-14deg) rotateX(4deg) translateY(0px); }
-  50%      { transform: perspective(900px) rotateY(-14deg) rotateX(4deg) translateY(-20px); }
-}
 @keyframes ret-glow-pulse {
   0%,100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
   50%      { opacity: 0.85; transform: translate(-50%,-50%) scale(1.08); }
 }
-@keyframes ret-scan {
-  0%   { transform: translateY(-100%); opacity: 0; }
-  20%  { opacity: 0.5; }
-  80%  { opacity: 0.5; }
-  100% { transform: translateY(500%); opacity: 0; }
+@keyframes ret-beam {
+  0%,100% { opacity: 0.09; }
+  50%      { opacity: 0.20; }
 }
 @keyframes ret-orbit {
   0%   { transform: rotate(0deg)   translateX(var(--r)) rotate(0deg);   }
   100% { transform: rotate(360deg) translateX(var(--r)) rotate(-360deg); }
 }
-@keyframes ret-beam {
-  0%,100% { opacity: 0.10; }
-  50%     { opacity: 0.22; }
-}
-.ret-vial-front { animation: ret-float      5.5s ease-in-out infinite; }
-.ret-glow       { animation: ret-glow-pulse 3.5s ease-in-out infinite; }
-.ret-scan       { animation: ret-scan       3.4s ease-in-out infinite; }
-.ret-beam       { animation: ret-beam       4s   ease-in-out infinite; }
+.ret-glow  { animation: ret-glow-pulse 3.5s ease-in-out infinite; }
+.ret-beam  { animation: ret-beam       4s   ease-in-out infinite; }
 `;
 
 const RECEPTOR_PILLS = [
-  { label: "GIP",      color: "#22c55e", r: "148px", dur: "7s",    delay: "0s"    },
-  { label: "GLP-1",    color: "#2dd4bf", r: "132px", dur: "9.5s",  delay: "-3.2s" },
-  { label: "Glucagon", color: "#a78bfa", r: "158px", dur: "11.5s", delay: "-5.8s" },
+  { label: "GIP",      color: "#22c55e", r: "155px", dur: "7s",    delay: "0s"    },
+  { label: "GLP-1",    color: "#2dd4bf", r: "138px", dur: "9.5s",  delay: "-3.2s" },
+  { label: "Glucagon", color: "#a78bfa", r: "165px", dur: "11.5s", delay: "-5.8s" },
 ];
 
+/* ─── Drag-to-spin vial viewer ─────────────────────────────────────────────── */
+function VialViewer() {
+  const viewerRef = useRef<HTMLDivElement>(null);
+  const [rot, setRot]   = useState(0);
+  const [zoom, setZoom] = useState(1);
+  const [hintVisible, setHintVisible] = useState(true);
+
+  const dragging   = useRef(false);
+  const startX     = useRef(0);
+  const startRot   = useRef(0);
+  const activeMap  = useRef(new Map<number, PointerEvent>());
+  const pinchStart = useRef<number | null>(null);
+  const pinchZoom0 = useRef(1);
+  const rotRef     = useRef(0);
+  const zoomRef    = useRef(1);
+
+  // keep refs in sync so event handlers always see latest values
+  useEffect(() => { rotRef.current  = rot;  }, [rot]);
+  useEffect(() => { zoomRef.current = zoom; }, [zoom]);
+
+  function clampZoom(z: number) { return Math.min(2.4, Math.max(0.7, z)); }
+
+  function dist(a: PointerEvent, b: PointerEvent) {
+    return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+  }
+
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    viewerRef.current?.setPointerCapture(e.pointerId);
+    activeMap.current.set(e.pointerId, e.nativeEvent);
+
+    if (activeMap.current.size === 2) {
+      const vals = [...activeMap.current.values()];
+      pinchStart.current = dist(vals[0], vals[1]);
+      pinchZoom0.current = zoomRef.current;
+    } else {
+      dragging.current = true;
+      startX.current   = e.clientX;
+      startRot.current = rotRef.current;
+    }
+    setHintVisible(false);
+  }, []);
+
+  const onPointerMove = useCallback((e: React.PointerEvent) => {
+    activeMap.current.set(e.pointerId, e.nativeEvent);
+
+    if (activeMap.current.size === 2 && pinchStart.current !== null) {
+      const vals = [...activeMap.current.values()];
+      const d = dist(vals[0], vals[1]);
+      setZoom(clampZoom(pinchZoom0.current * (d / pinchStart.current!)));
+      return;
+    }
+    if (!dragging.current) return;
+    const dx = e.clientX - startX.current;
+    setRot(startRot.current + dx * 0.45);
+  }, []);
+
+  const onPointerUp = useCallback((e: React.PointerEvent) => {
+    activeMap.current.delete(e.pointerId);
+    if (activeMap.current.size < 2) pinchStart.current = null;
+    dragging.current = false;
+  }, []);
+
+  const onWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    setZoom(z => clampZoom(z + (e.deltaY < 0 ? 0.06 : -0.06)));
+    setHintVisible(false);
+  }, []);
+
+  function reset() { setRot(0); setZoom(1); setHintVisible(true); }
+
+  // Derive CSS transform from rotation
+  const sinVal  = Math.sin((rot * Math.PI) / 180);
+  const cosVal  = Math.abs(Math.cos((rot * Math.PI) / 180));
+  const scaleX  = cosVal * 0.22 + 0.78;
+  const tiltZ   = rot * 0.018;
+  const translateY = sinVal * 7;
+
+  const imgStyle: React.CSSProperties = {
+    transform: `translateY(${translateY}px) scale(${zoom}) rotateZ(${tiltZ}deg) scaleX(${scaleX})`,
+    transition: dragging.current ? "none" : "transform 0.08s linear",
+    maxWidth: "100%",
+    maxHeight: "100%",
+    objectFit: "contain" as const,
+    filter: "drop-shadow(0 28px 48px rgba(0,0,0,0.75)) drop-shadow(0 0 30px rgba(168,139,250,0.22))",
+    transformOrigin: "center center",
+    userSelect: "none" as const,
+    WebkitUserSelect: "none" as const,
+    pointerEvents: "none" as const,
+    display: "block",
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      {/* ── stage ── */}
+      <div
+        ref={viewerRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        onWheel={onWheel}
+        style={{
+          position: "relative",
+          width: 260,
+          height: 360,
+          display: "grid",
+          placeItems: "center",
+          touchAction: "none",
+          cursor: dragging.current ? "grabbing" : "grab",
+          overflow: "hidden",
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/retatrutide.png"
+          alt="Retatrutide 30 mg"
+          draggable={false}
+          style={imgStyle}
+        />
+
+        {/* Purity badge */}
+        <div style={{
+          position: "absolute", top: 8, right: 0,
+          padding: "4px 10px", borderRadius: 999,
+          fontSize: 10, fontWeight: 700,
+          backgroundColor: "rgba(34,197,94,0.14)",
+          border: "1px solid rgba(34,197,94,0.38)",
+          color: "#22c55e",
+        }}>
+          ≥ 99% Pure
+        </div>
+
+        {/* Drag hint */}
+        {hintVisible && (
+          <div style={{
+            position: "absolute", bottom: 10, left: "50%",
+            transform: "translateX(-50%)",
+            padding: "7px 14px", borderRadius: 999,
+            fontSize: 11, color: "#8da8a0",
+            backgroundColor: "rgba(10,20,16,0.75)",
+            border: "1px solid rgba(34,197,94,0.18)",
+            whiteSpace: "nowrap", pointerEvents: "none",
+          }}>
+            Drag to spin · Scroll to zoom
+          </div>
+        )}
+      </div>
+
+      {/* ── controls ── */}
+      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        {[
+          { label: "◀", action: () => { setRot(r => r - 20); setHintVisible(false); } },
+          { label: "▶", action: () => { setRot(r => r + 20); setHintVisible(false); } },
+          { label: "−", action: () => setZoom(z => clampZoom(z - 0.1)) },
+          { label: "+", action: () => setZoom(z => clampZoom(z + 0.1)) },
+        ].map(({ label, action }) => (
+          <button key={label} onClick={action}
+            style={{
+              border: "1px solid rgba(34,197,94,0.22)",
+              background: "rgba(34,197,94,0.06)",
+              color: "#22c55e",
+              padding: "8px 14px",
+              borderRadius: 999,
+              fontSize: 13,
+              cursor: "pointer",
+              minWidth: 40,
+              fontWeight: 600,
+            }}>
+            {label}
+          </button>
+        ))}
+        <button onClick={reset}
+          style={{
+            border: "1px solid rgba(255,255,255,0.10)",
+            background: "transparent",
+            color: "#8da8a0",
+            padding: "8px 12px",
+            borderRadius: 999,
+            fontSize: 12,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: 4,
+          }}>
+          <RotateCcw size={12} /> Reset
+        </button>
+      </div>
+
+      {/* stat line */}
+      <div style={{ fontSize: 11, color: "#3d5448", letterSpacing: "0.08em" }}>
+        Rotation {Math.round(rot)}° · Zoom {zoom.toFixed(2)}×
+      </div>
+    </div>
+  );
+}
+
+/* ─── Main exhibit ────────────────────────────────────────────────────────── */
 export default function RetatrutideExhibit() {
   return (
     <>
@@ -47,12 +233,11 @@ export default function RetatrutideExhibit() {
       <section className="relative py-28 overflow-hidden"
         style={{ background: "linear-gradient(170deg, #04090f 0%, #051a10 45%, #04090f 100%)" }}>
 
-        {/* ── background atmosphere ── */}
+        {/* Background atmosphere */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="ret-glow absolute"
             style={{
-              width: 680, height: 680,
-              top: "50%", left: "62%",
+              width: 680, height: 680, top: "50%", left: "62%",
               borderRadius: "50%",
               background: "radial-gradient(circle, rgba(34,197,94,0.10) 0%, transparent 60%)",
             }} />
@@ -76,7 +261,6 @@ export default function RetatrutideExhibit() {
           }} />
         </div>
 
-        {/* ── main layout ── */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
@@ -129,9 +313,9 @@ export default function RetatrutideExhibit() {
               {/* Specs */}
               <div className="flex gap-8 mb-8">
                 {[
-                  { label: "Purity",   value: "≥ 99%"      },
-                  { label: "Quantity", value: "30 mg"       },
-                  { label: "Storage",  value: "−20°C"       },
+                  { label: "Purity",   value: "≥ 99%"  },
+                  { label: "Quantity", value: "30 mg"   },
+                  { label: "Storage",  value: "−20°C"   },
                 ].map(({ label, value }) => (
                   <div key={label}>
                     <div className="text-[10px] uppercase tracking-[0.15em] font-semibold mb-1"
@@ -141,7 +325,6 @@ export default function RetatrutideExhibit() {
                 ))}
               </div>
 
-              {/* CTA */}
               <div className="flex flex-wrap gap-3 mb-4">
                 <Link href="/catalog/retatrutide"
                   className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95"
@@ -160,24 +343,23 @@ export default function RetatrutideExhibit() {
               </p>
             </div>
 
-            {/* ━━━ RIGHT: 3D VIAL STAGE ━━━ */}
+            {/* ━━━ RIGHT: 3D SPIN VIEWER ━━━ */}
             <div className="order-1 lg:order-2 flex items-center justify-center">
-              <div className="relative" style={{ width: 360, height: 420 }}>
+              <div className="relative" style={{ width: 360, height: 460 }}>
 
-                {/* Glow bloom */}
+                {/* Glow bloom behind vial */}
                 <div className="ret-glow absolute"
                   style={{
-                    width: 320, height: 320,
-                    top: "50%", left: "50%",
+                    width: 300, height: 300, top: "42%", left: "50%",
                     borderRadius: "50%",
-                    background: "radial-gradient(circle, rgba(34,197,94,0.16) 0%, transparent 65%)",
+                    background: "radial-gradient(circle, rgba(34,197,94,0.18) 0%, transparent 65%)",
                   }} />
 
                 {/* Orbiting receptor pills */}
                 {RECEPTOR_PILLS.map(({ label, color, r, dur, delay }) => (
                   <div key={label} className="absolute"
                     style={{
-                      top: "46%", left: "50%",
+                      top: "44%", left: "50%",
                       "--r": r,
                       animation: `ret-orbit ${dur} linear infinite`,
                       animationDelay: delay,
@@ -196,57 +378,20 @@ export default function RetatrutideExhibit() {
                   </div>
                 ))}
 
-                {/* ── SINGLE VIAL ── */}
-                <div className="ret-vial-front absolute"
-                  style={{
-                    width: 220, height: 340,
-                    top: "4%", left: "50%",
-                    marginLeft: -110,
-                    transformOrigin: "center bottom",
-                    filter: "drop-shadow(0 32px 64px rgba(0,0,0,0.85)) drop-shadow(0 0 32px rgba(34,197,94,0.25))",
-                    zIndex: 2,
-                  }}>
-                  <div className="relative w-full h-full">
-                    <Image
-                      src="/images/retatrutide.png"
-                      alt="Retatrutide 30 mg"
-                      fill
-                      className="object-contain"
-                      sizes="220px"
-                      priority
-                    />
-                  </div>
-
-                  {/* Scan line */}
-                  <div className="ret-scan absolute inset-x-0 h-10 pointer-events-none"
-                    style={{ background: "linear-gradient(to bottom, transparent, rgba(168,139,250,0.20), transparent)" }} />
-
-                  {/* Purity badge */}
-                  <div className="absolute -top-2 -right-4 px-2.5 py-1 rounded-full text-[10px] font-bold"
-                    style={{
-                      backgroundColor: "#22c55e18",
-                      border: "1px solid #22c55e40",
-                      color: "#22c55e",
-                    }}>
-                    ≥ 99% Pure
-                  </div>
-
-                  {/* Price tag */}
-                  <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-center whitespace-nowrap">
-                    <div className="text-sm font-bold text-white">30 mg</div>
-                    <div className="text-xs" style={{ color: "#22c55e" }}>$219 / vial</div>
-                  </div>
+                {/* Spin viewer centred in stage */}
+                <div className="absolute" style={{ top: "50%", left: "50%", transform: "translate(-50%, -52%)", zIndex: 2 }}>
+                  <VialViewer />
                 </div>
 
-                {/* Floor reflection line */}
-                <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
+                {/* Floor line */}
+                <div className="absolute bottom-2 left-0 right-0 h-12 pointer-events-none"
                   style={{
                     background: "linear-gradient(to top, rgba(34,197,94,0.06), transparent)",
                     borderTop: "1px solid rgba(34,197,94,0.07)",
                   }} />
 
                 {/* Bottom badge */}
-                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2">
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-10">
                   <div className="px-4 py-1.5 rounded-full text-[11px] font-bold whitespace-nowrap"
                     style={{
                       background: "linear-gradient(135deg, rgba(34,197,94,0.14), rgba(45,212,191,0.09))",
