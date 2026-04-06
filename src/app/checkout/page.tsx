@@ -74,9 +74,12 @@ export default function CheckoutPage() {
   const federalTax = total * FEDERAL_TAX_RATE;
   const totalTax = stateTax + federalTax;
 
-  const shippingCost = shipping.method === "express"
-    ? (total >= FREE_SHIPPING_THRESHOLD ? 0 : EXPRESS_SHIPPING_COST)
-    : 0;
+  const STANDARD_SHIPPING_COST = 8.99;
+  const shippingCost = total >= FREE_SHIPPING_THRESHOLD
+    ? 0
+    : shipping.method === "express"
+      ? EXPRESS_SHIPPING_COST
+      : STANDARD_SHIPPING_COST;
 
   const subtotalWithTax = total + totalTax + shippingCost;
   const isCrypto = paymentMethod === "crypto";
@@ -311,8 +314,8 @@ export default function CheckoutPage() {
                         id: "standard",
                         label: "Standard Shipping",
                         est: "5-7 business days",
-                        price: "FREE",
-                        note: "Always free",
+                        price: total >= FREE_SHIPPING_THRESHOLD ? "FREE" : "$8.99",
+                        note: total >= FREE_SHIPPING_THRESHOLD ? "Free — order over $420" : "Free on orders over $420",
                       },
                       {
                         id: "express",
@@ -771,9 +774,7 @@ export default function CheckoutPage() {
                 <div className="flex justify-between text-xs" style={{ color: "#9c9590" }}>
                   <span>Shipping</span>
                   <span style={{ color: shippingCost === 0 ? "#01696f" : "#9c9590" }}>
-                    {shipping.method === "express"
-                      ? shippingCost === 0 ? "FREE" : `$${shippingCost.toFixed(2)}`
-                      : "FREE"}
+                    {shippingCost === 0 ? "FREE" : `$${shippingCost.toFixed(2)}`}
                   </span>
                 </div>
               </div>
