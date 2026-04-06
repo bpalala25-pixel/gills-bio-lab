@@ -34,6 +34,10 @@ export default function CheckoutPage() {
 
   const [info, setInfo] = useState({ name: "", institution: "", role: "", email: "", phone: "" });
   const [shipping, setShipping] = useState({ address: "", city: "", state: "", zip: "", country: "US", method: "standard" });
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  function isValidPhone(v: string) { return /^\+?[\d\s\-().]{7,15}$/.test(v.trim()); }
+  function isValidAddress(v: string) { return /^\d+\s+\S/.test(v.trim()) && v.trim().length >= 6; }
   const [paymentMethod, setPaymentMethod] = useState<"crypto" | "cashapp">("cashapp");
   const [selectedCoin, setSelectedCoin] = useState<typeof CRYPTO_COINS[number]["id"]>("usdc");
   const [copied, setCopied] = useState(false);
@@ -170,22 +174,32 @@ export default function CheckoutPage() {
                   { label: "Full Name *", key: "name", type: "text", placeholder: "Dr. Jane Smith" },
                   { label: "Institution / Lab Name *", key: "institution", type: "text", placeholder: "University Research Laboratory" },
                   { label: "Email Address *", key: "email", type: "email", placeholder: "researcher@institution.edu" },
-                  { label: "Phone (optional)", key: "phone", type: "tel", placeholder: "+1 (555) 000-0000" },
-                ].map((f) => (
-                  <div key={f.key}>
-                    <label className="block text-xs font-bold uppercase tracking-widest mb-1.5" style={labelStyle}>
-                      {f.label}
-                    </label>
-                    <input
-                      type={f.type}
-                      value={info[f.key as keyof typeof info]}
-                      onChange={e => setInfo(i => ({ ...i, [f.key]: e.target.value }))}
-                      placeholder={f.placeholder}
-                      className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                      style={inputStyle}
-                    />
-                  </div>
-                ))}
+                  { label: "Phone *", key: "phone", type: "tel", placeholder: "+1 (555) 000-0000" },
+                ].map((f) => {
+                  const val = info[f.key as keyof typeof info];
+                  const showPhoneErr = f.key === "phone" && touched["phone"] && val && !isValidPhone(val);
+                  return (
+                    <div key={f.key}>
+                      <label className="block text-xs font-bold uppercase tracking-widest mb-1.5" style={labelStyle}>
+                        {f.label}
+                      </label>
+                      <input
+                        type={f.type}
+                        value={val}
+                        onChange={e => setInfo(i => ({ ...i, [f.key]: e.target.value }))}
+                        onBlur={() => setTouched(t => ({ ...t, [f.key]: true }))}
+                        placeholder={f.placeholder}
+                        className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                        style={{ ...inputStyle, borderColor: showPhoneErr ? "rgba(220,38,38,0.50)" : undefined }}
+                      />
+                      {showPhoneErr && (
+                        <p className="text-[11px] mt-1.5" style={{ color: "#dc2626" }}>
+                          Please enter a valid phone number (e.g. +1 555 000-0000).
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-widest mb-1.5" style={labelStyle}>
                     Researcher / Buyer Type *
@@ -209,7 +223,7 @@ export default function CheckoutPage() {
 
                 <button
                   onClick={() => setStep("shipping")}
-                  disabled={!info.name || !info.institution || !info.email || !info.role}
+                  disabled={!info.name || !info.institution || !info.email || !info.role || !info.phone || !isValidPhone(info.phone)}
                   className="w-full py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed mt-2"
                   style={{ background: "linear-gradient(135deg, #01696f, #018a92)", color: "#ffffff", boxShadow: "0 4px 20px rgba(1,105,111,0.25)" }}
                 >
@@ -226,21 +240,31 @@ export default function CheckoutPage() {
                   { label: "City *", key: "city", placeholder: "Boston" },
                   { label: "State / Province *", key: "state", placeholder: "MA" },
                   { label: "ZIP / Postal Code *", key: "zip", placeholder: "02101" },
-                ].map((f) => (
-                  <div key={f.key}>
-                    <label className="block text-xs font-bold uppercase tracking-widest mb-1.5" style={labelStyle}>
-                      {f.label}
-                    </label>
-                    <input
-                      type="text"
-                      value={shipping[f.key as keyof typeof shipping]}
-                      onChange={e => setShipping(s => ({ ...s, [f.key]: e.target.value }))}
-                      placeholder={f.placeholder}
-                      className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                      style={inputStyle}
-                    />
-                  </div>
-                ))}
+                ].map((f) => {
+                  const val = shipping[f.key as keyof typeof shipping] as string;
+                  const showAddrErr = f.key === "address" && touched["address"] && val && !isValidAddress(val);
+                  return (
+                    <div key={f.key}>
+                      <label className="block text-xs font-bold uppercase tracking-widest mb-1.5" style={labelStyle}>
+                        {f.label}
+                      </label>
+                      <input
+                        type="text"
+                        value={val}
+                        onChange={e => setShipping(s => ({ ...s, [f.key]: e.target.value }))}
+                        onBlur={() => setTouched(t => ({ ...t, [f.key]: true }))}
+                        placeholder={f.placeholder}
+                        className="w-full px-4 py-3 rounded-xl text-sm outline-none"
+                        style={{ ...inputStyle, borderColor: showAddrErr ? "rgba(220,38,38,0.50)" : undefined }}
+                      />
+                      {showAddrErr && (
+                        <p className="text-[11px] mt-1.5" style={{ color: "#dc2626" }}>
+                          Please enter a valid street address (e.g. 123 Research Drive).
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
 
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-widest mb-3" style={labelStyle}>
@@ -279,7 +303,7 @@ export default function CheckoutPage() {
                   </button>
                   <button
                     onClick={() => setStep("payment")}
-                    disabled={!shipping.address || !shipping.city || !shipping.zip}
+                    disabled={!shipping.address || !isValidAddress(shipping.address) || !shipping.city || !shipping.zip}
                     className="flex-1 py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-105 disabled:opacity-40"
                     style={{ background: "linear-gradient(135deg, #01696f, #018a92)", color: "#ffffff" }}
                   >
