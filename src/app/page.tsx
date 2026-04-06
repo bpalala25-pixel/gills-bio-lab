@@ -395,40 +395,58 @@ export default function HomePage() {
       </section>
 
       {/* ── EMAIL CAPTURE ────────────────────────────────────────────────── */}
-      <section className="py-24"
+      <section className="relative py-28 overflow-hidden"
         style={{ background: "linear-gradient(160deg, #ede9f5 0%, #e8f4f4 100%)" }}>
-        <div className="max-w-2xl mx-auto px-4 text-center">
+        {/* Background orbs */}
+        <div className="absolute top-0 left-1/4 w-[400px] h-[300px] pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(139,92,246,0.10) 0%, transparent 65%)", filter: "blur(40px)" }} />
+        <div className="absolute bottom-0 right-1/4 w-[350px] h-[250px] pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(1,105,111,0.09) 0%, transparent 65%)", filter: "blur(36px)" }} />
+        <div className="relative max-w-2xl mx-auto px-4 text-center">
           <RevealSection>
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] mb-3 block" style={{ color: "#8b5cf6" }}>
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] mb-4 block justify-center" style={{ color: "#8b5cf6" }}>
+              <span className="w-1 h-1 rounded-full" style={{ backgroundColor: "#8b5cf6" }} />
               Research Updates
             </span>
-            <h2 className="text-2xl font-black mb-3" style={{ color: "#1c1917", letterSpacing: "-0.02em" }}>
-              Stay Informed on New Compounds
+            <h2 className="text-3xl font-black mb-4" style={{ color: "#1c1917", letterSpacing: "-0.02em" }}>
+              Stay ahead of{" "}
+              <span style={{
+                background: "linear-gradient(135deg, #8b5cf6, #01696f)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}>new compounds.</span>
             </h2>
-            <p className="text-sm mb-8 leading-relaxed" style={{ color: "#9c9590" }}>
-              Get updates when new research chemicals are added to the catalog. For qualified labs and institutions only.
+            <p className="text-sm mb-8 leading-relaxed max-w-sm mx-auto" style={{ color: "#9c9590" }}>
+              Get notified when new research chemicals are added. For qualified labs and institutions only.
             </p>
-            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={e => e.preventDefault()}>
+            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-4" onSubmit={e => e.preventDefault()}>
               <input
                 type="email"
                 placeholder="Institutional email address"
-                className="flex-1 px-4 py-3 rounded-xl text-sm outline-none transition-all"
+                className="flex-1 px-4 py-3.5 rounded-xl text-sm outline-none transition-all"
                 style={{
-                  backgroundColor: "rgba(255,255,255,0.85)",
+                  backgroundColor: "rgba(255,255,255,0.88)",
                   border: "1px solid rgba(28,25,23,0.12)",
                   color: "#1c1917",
+                  boxShadow: "0 2px 12px rgba(28,25,23,0.05), inset 0 1px 0 rgba(255,255,255,0.80)",
                 }}
+                onFocus={e => (e.target.style.borderColor = "rgba(1,105,111,0.35)")}
+                onBlur={e => (e.target.style.borderColor = "rgba(28,25,23,0.12)")}
               />
               <button type="submit"
-                className="px-6 py-3 rounded-xl text-sm font-bold transition-all hover:scale-105"
+                className="btn-shimmer px-7 py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-105 hover:-translate-y-0.5"
                 style={{
                   background: "linear-gradient(135deg, #01696f, #018a92)",
                   color: "#ffffff",
-                  boxShadow: "0 4px 20px rgba(1,105,111,0.25)",
+                  boxShadow: "0 6px 24px rgba(1,105,111,0.30), inset 0 1px 0 rgba(255,255,255,0.15)",
                 }}>
                 Subscribe
               </button>
             </form>
+            <p className="text-[10px]" style={{ color: "#9c9590" }}>
+              No spam. Unsubscribe any time. Research institutions only.
+            </p>
           </RevealSection>
         </div>
       </section>
