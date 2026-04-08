@@ -70,7 +70,7 @@
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "eslint": "^9.39.2",
-        "eslint-config-next": "15.3.6",
+        "eslint-config-next": "^15.5.14",
         "estree-walker": "2.0.2",
         "magic-string": "^0.30.21",
         "tailwindcss": "^4",
