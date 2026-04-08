@@ -177,9 +177,9 @@ export const products: Product[] = [
     name: "\"Glow\" Blend",
     code: "GLOW",
     category: "Blends",
-    tagline: "BPC-157 10 mg + GHK-Cu 50 mg + Tesamorelin 10 mg precision research blend.",
+    tagline: "BPC-157 10 mg + GHK-Cu 50 mg + TB-500 10 mg precision research blend.",
     description:
-      "The Gills Bio Lab \"Glow\" Blend combines BPC-157 (10 mg), GHK-Cu (50 mg), and Tesamorelin (10 mg) in a single precision-blended vial. Supplied as a research chemical for laboratory use only. Suitable for in vitro studies examining the combined interaction profiles of these peptide and copper-tripeptide compounds in a controlled laboratory setting.",
+      "The Gills Bio Lab \"Glow\" Blend combines BPC-157 (10 mg), GHK-Cu (50 mg), and TB-500 (10 mg) in a single precision-blended vial. Supplied as a research chemical for laboratory use only. Suitable for in vitro studies examining the combined interaction profiles of these peptide and copper-tripeptide compounds in a controlled laboratory setting.",
     quantity: "70 mg total / vial",
     form: "Lyophilized powder",
     purity: "≥ 98%",
