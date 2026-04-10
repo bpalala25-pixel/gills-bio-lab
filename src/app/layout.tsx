@@ -8,6 +8,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ChatWidget from "@/components/chat-widget";
 import { CartProvider } from "@/lib/cart-context";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -95,6 +96,7 @@ export default function RootLayout({
           <ChatWidget />
         </CartProvider>
         <VisualEditsMessenger />
+        <Analytics />
       </body>
     </html>
   );
